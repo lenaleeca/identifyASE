@@ -18,9 +18,8 @@ To install the IdentifyASE package from GitHub, you need to use the `devtools` p
 2. **Install the package from GitHub**
 
     ```r
-    # Replace 'yourusername' and 'yourpackagename' with your GitHub username and repository name
     # Replace 'your_personal_access_token' with your GitHub personal access token
-    install_github("yourusername/yourpackagename", auth_token = "your_personal_access_token")
+    install_github("lenaleeca/identifyASE", auth_token = "your_personal_access_token")
     ```
 
 3. **Load the package**
@@ -37,13 +36,12 @@ This package depends on the following R packages:
 - `purrr`
 - `future`
 - `furrr`
-- `roxygen2`
 - `devtools`
 
 Make sure these packages are installed and loaded in your R environment.
 
 ```r
-install.packages(c("dplyr", "purrr", "future", "furrr", "roxygen2", "devtools"))
+install.packages(c("dplyr", "purrr", "future", "furrr", "devtools"))
 ```
 
 ## Usage
@@ -62,9 +60,12 @@ daily_data <- data.frame(
   imv_daily = c(0, 0, 1, 0, 1, 0),
   lact_daily_hi = c(1.5, 2.5, 1.8, 1.9, 2.1, 3.0),
   tbili_daily_hi = c(30, 35, 40, 32, 36, 38),
+  tbili_daily_lo = c(30, 35, 40, 32, 36, 38),
   tbili_baseline = c(20, 20, 20, 25, 25, 25),
   creat_daily_hi = c(40, 45, 50, 35, 60, 55),
+  creat_daily_lo = c(40, 45, 50, 35, 60, 55),
   creat_baseline = c(20, 20, 20, 25, 25, 25),
+  plt_daily_hi = c(150, 80, 90, 110, 70, 50),
   plt_daily_lo = c(150, 80, 90, 110, 70, 50),
   plt_baseline = c(200, 200, 200, 180, 180, 180),
   ELX_All_33 = c(0, 0, 0, 0, 0, 0),
