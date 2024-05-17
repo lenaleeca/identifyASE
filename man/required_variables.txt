@@ -1,0 +1,39 @@
+Here's a consolidated list of all the required input variables for the functions provided:
+
+Required Input Variables
+
+- `unique_pt_id`: Unique patient identifier.
+- `seqnum`: Sequence number.
+- `day`: Day of the observation.
+- `bcx_daily`: Indicator for blood culture on that day.
+- `vasop_daily`: Indicator for vasopressor use on that day.
+- `imv_daily`: Indicator for invasive mechanical ventilation on that day.
+- `lact_daily_hi`: High lactate levels on that day.
+- `tbili_daily_hi`: High bilirubin levels on that day.
+- `tbili_baseline`: Baseline bilirubin levels.
+- `creat_daily_hi`: High creatinine levels on that day.
+- `creat_baseline`: Baseline creatinine levels.
+- `plt_daily_lo`: Low platelet count on that day.
+- `plt_baseline`: Baseline platelet count.
+- `ELX_All_33`: Exclusion indicator.
+- `new_abx_start`: Indicator for new antibiotic start on that day.
+- `abx_daily`: Indicator for antibiotic use on that day.
+- `death`: Indicator for death on that day.
+- `transfer_acute`: Indicator for acute transfer on that day.
+- `ALL_DAYS`: Total number of days in the observation period.
+- `abx_window_startday`: Start day of antibiotic use within the window period (calculated within the function).
+- `abx_qualifying_ep`: Indicator for qualifying antibiotic episode (calculated within the function).
+- `aod_any_daily_comm`: Indicator for any acute organ dysfunction on that day (community-onset, calculated within the function).
+- `aod_any_daily_hosp`: Indicator for any acute organ dysfunction on that day (hospital-onset, calculated within the function).
+
+Additional Function-Specific Variables
+
+- `sliced_data_list`: A list of lists containing `unique_pt_id`, `seqnum`, and a data frame (`data`) with sliced data.
+- `target_seqnum`: An integer specifying the sequence number to search for.
+- `window_day_col`: A string specifying the name of the column indicating the presence of blood culture days within a specified window.
+- `window`: An integer specifying the number of days before and after each day to check for blood culture days.
+- `slide_day_before`: An integer specifying the number of days before each blood culture day to include in the slice (default is 2).
+- `slide_day_after`: An integer specifying the number of days after each blood culture day to include in the slice (default is 6).
+- `aim`: An integer specifying the aim criteria: 2 for specific criteria or 3 for extended criteria.
+- `transferout_id`: A vector of sequence numbers (`seqnum`) indicating patients who were transferred out acutely.
+- `cohort_id`: A list of two vectors: the first vector contains patient IDs (`unique_pt_id`) and the second vector contains sequence numbers (`seqnum`) for selecting a sub-cohort (default is NULL).
