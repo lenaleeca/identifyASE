@@ -1,0 +1,20 @@
+---
+title: "Identify Adult Sepsis Events"
+author: "Dr. Na Li"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Title of Your Vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Introduction
+
+This is a vignette for demonstrating the functionality of your package.
+
+```{r}
+library(ASE)
+# Example code
+
+```

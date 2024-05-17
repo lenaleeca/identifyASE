@@ -1,6 +1,6 @@
 #' Add Acute Organ Dysfunction (AOD) Daily Variables
 #'
-#' This function calculates and adds daily indicators for various types of acute organ dysfunction (AOD) to the data, 
+#' This function calculates and adds daily indicators for various types of acute organ dysfunction (AOD) to the data,
 #' based on given criteria for cardiovascular, respiratory, lactate, liver, renal, and hematologic dysfunctions.
 #'
 #' @param data A data frame containing patient data with columns `unique_pt_id`, `seqnum`, `day`, and various clinical measurements.
@@ -25,7 +25,7 @@
 #' )
 #' data <- add_window_day(data, "window_day", 1)
 #' add_aod_daily(data, "window_day")
-# Function to calculate aods
+#' @export
 add_aod_daily <- function(data, window_day_col) {
   data <- data %>%
     arrange(unique_pt_id, seqnum, day) %>%
@@ -49,11 +49,11 @@ add_aod_daily <- function(data, window_day_col) {
     ungroup() %>%
     group_by(unique_pt_id, seqnum) %>%
     mutate(
-      tbili_baseline_window = ifelse(any(.data[[window_day_col]] == 1) & any(!is.na(tbili_daily_lo)), 
+      tbili_baseline_window = ifelse(any(.data[[window_day_col]] == 1) & any(!is.na(tbili_daily_lo)),
                                      ifelse(all(is.na(tbili_daily_lo[.data[[window_day_col]] == 1])), NA, min(tbili_daily_lo[.data[[window_day_col]] == 1], na.rm = TRUE)), NA),
-      creat_baseline_window = ifelse(any(.data[[window_day_col]] == 1) & any(!is.na(creat_daily_lo)), 
+      creat_baseline_window = ifelse(any(.data[[window_day_col]] == 1) & any(!is.na(creat_daily_lo)),
                                      ifelse(all(is.na(creat_daily_lo[.data[[window_day_col]] == 1])), NA, min(creat_daily_lo[.data[[window_day_col]] == 1], na.rm = TRUE)), NA),
-      plt_baseline_window = ifelse(any(.data[[window_day_col]] == 1) & any(!is.na(plt_daily_lo)), 
+      plt_baseline_window = ifelse(any(.data[[window_day_col]] == 1) & any(!is.na(plt_daily_lo)),
                                    ifelse(all(is.na(plt_daily_lo[.data[[window_day_col]] == 1])), NA, min(plt_daily_hi[.data[[window_day_col]] == 1], na.rm = TRUE)), NA)
     ) %>%
     ungroup() %>%
@@ -66,20 +66,20 @@ add_aod_daily <- function(data, window_day_col) {
       aod_heme_daily_window = replace(aod_heme_daily_window, is.na(aod_heme_daily_window), 0)
     ) %>%
     mutate(
-      aod_any_daily_comm = ifelse(((aod_renal_daily == 1 & .data[[window_day_col]] == 1) | 
+      aod_any_daily_comm = ifelse(((aod_renal_daily == 1 & .data[[window_day_col]] == 1) |
                                      (aod_liver_daily == 1 & .data[[window_day_col]] == 1) |
-                                     (aod_heme_daily == 1 & .data[[window_day_col]] == 1) | 
-                                     (aod_cv_daily == 1 & .data[[window_day_col]] == 1) | 
-                                     (aod_imv_daily == 1 & .data[[window_day_col]] == 1) | 
+                                     (aod_heme_daily == 1 & .data[[window_day_col]] == 1) |
+                                     (aod_cv_daily == 1 & .data[[window_day_col]] == 1) |
+                                     (aod_imv_daily == 1 & .data[[window_day_col]] == 1) |
                                      (aod_lactate_daily == 1 & .data[[window_day_col]] == 1)), 1, 0),
-      
-      aod_any_daily_hosp = ifelse(((aod_renal_daily_window == 1 & .data[[window_day_col]] == 1) | 
-                                     (aod_liver_daily_window == 1 & .data[[window_day_col]] == 1) | 
-                                     (aod_heme_daily_window == 1 & .data[[window_day_col]] == 1) | 
-                                     (aod_cv_daily == 1 & .data[[window_day_col]] == 1) | 
-                                     (aod_imv_daily == 1 & .data[[window_day_col]] == 1) | 
+
+      aod_any_daily_hosp = ifelse(((aod_renal_daily_window == 1 & .data[[window_day_col]] == 1) |
+                                     (aod_liver_daily_window == 1 & .data[[window_day_col]] == 1) |
+                                     (aod_heme_daily_window == 1 & .data[[window_day_col]] == 1) |
+                                     (aod_cv_daily == 1 & .data[[window_day_col]] == 1) |
+                                     (aod_imv_daily == 1 & .data[[window_day_col]] == 1) |
                                      (aod_lactate_daily == 1 & .data[[window_day_col]] == 1)), 1, 0)
     )
-  
+
   return(data)
 }

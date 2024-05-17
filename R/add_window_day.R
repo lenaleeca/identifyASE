@@ -14,7 +14,7 @@
 #'   bcx_daily = c(0, 1, 0, 0, 1, 0)
 #' )
 #' add_window_day(data, "window_day", 1)
-# Function to add window_day variable with a parameter for the column name
+#' @export
 add_window_day <- function(data, window_day_col, window) {
   data <- data %>%
     arrange(unique_pt_id, seqnum, day) %>%
@@ -27,6 +27,6 @@ add_window_day <- function(data, window_day_col, window) {
       }
     })) %>%
     ungroup()
-  
+
   return(data)
 }

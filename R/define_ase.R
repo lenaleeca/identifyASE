@@ -1,6 +1,6 @@
-#' Define Acute Sepsis Episodes and Discharge Information
+#' Define Acute Sepsis Episodes
 #'
-#' This function processes daily patient data to define acute sepsis episodes and discharge information. It includes steps for data formatting, selecting sub-cohorts, creating transfer indicators, and applying transformations to identify sepsis.
+#' This function processes daily patient data to define acute sepsis episodes, taking into account cohort selection and acute transfer out indicators. It also applies window transformations and slices data around blood culture days.
 #'
 #' @param daily_data A data frame containing daily patient data with columns `unique_pt_id`, `seqnum`, `day`, `death`, `ALL_DAYS`, and other clinical variables.
 #' @param transferout_id A vector of sequence numbers (`seqnum`) indicating patients who were transferred out acutely.
@@ -29,10 +29,10 @@
 #'   abx_daily = c(0, 1, 1, 0, 1, 1)
 #' )
 #' transferout_id <- c(1)
-#' define_ase_disch(daily_data, transferout_id)
+#' define_ase(daily_data, transferout_id)
 #' @export
-define_ase_disch <- function(daily_data, transferout_id,
-                                cohort_id = NULL) {
+define_ase <- function(daily_data, transferout_id,
+                          cohort_id = NULL) {
 
   ###### Data formatting #########
   # correct first inpatient day as 1 instead of 0
@@ -69,8 +69,8 @@ define_ase_disch <- function(daily_data, transferout_id,
   sliced_data_list_window3 <- slice_bcx_data(daily_data, slide_day_before=3, slide_day_after=7)
 
   # Apply add_window_day to each slice in the sliced_data_list; this function is slow
-  updated_sliced_data_list <- apply_all_transformations(sliced_data_list, window_day_col="window_day", aim=3)
-  updated_sliced_data_list_window3 <- apply_all_transformations(sliced_data_list_window3, window_day_col="window_day3", aim=3)
+  updated_sliced_data_list <- apply_all_transformations(sliced_data_list, window_day_col="window_day", aim=2)
+  updated_sliced_data_list_window3 <- apply_all_transformations(sliced_data_list_window3, window_day_col="window_day3", aim=2)
 
   final_combined_data <- bind_rows(lapply(updated_sliced_data_list, function(slice_info) slice_info$data))
   final_combined_data <- final_combined_data[!duplicated(final_combined_data), ]

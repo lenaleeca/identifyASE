@@ -17,7 +17,7 @@
 #'   abx_qualifying_ep = c(1, 1, 1, 0, 1, 1)
 #' )
 #' define_sepsis(data)
-# function to define sepsis
+#' @export
 define_sepsis <- function(data) {
   data <- data %>%
     arrange(unique_pt_id, seqnum, day) %>%
@@ -31,7 +31,7 @@ define_sepsis <- function(data) {
       sepsis_com_v2 = ifelse(onset_day_comm <=2 & (abx_qualifying_ep==1) & (aod_any_daily_comm==1), 1, 0),
       sepsis_hosp_v2 = ifelse(onset_day_hosp>2 & (abx_qualifying_ep==1) & (aod_any_daily_hosp==1), 1, 0)
     ) %>%
-    ungroup() 
-  
+    ungroup()
+
   return(data)
 }

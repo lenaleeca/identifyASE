@@ -20,7 +20,7 @@
 #'   window_day = c(1, 1, 0, 1, 1, 0)
 #' )
 #' qualifying_abx_duration(data, "window_day", 2)
-# function to capture qualifying antimicrobials
+#' @export
 qualifying_abx_duration <- function(data, window_day_col="window_day", aim=2) {
   data <- data %>%
     arrange(unique_pt_id, seqnum, day) %>%
@@ -35,23 +35,23 @@ qualifying_abx_duration <- function(data, window_day_col="window_day", aim=2) {
       transfer_acute_bcx_day = ifelse(any(transfer_acute==1), (day[transfer_acute == 1] - max(day[.data[[window_day_col]] == 1])), NA),
       disch_bcx_day = ifelse(all(death==0) & all(transfer_acute==0), (ALL_DAYS - max(day[.data[[window_day_col]] == 1])), NA)
     ) %>%
-    ungroup() 
-  
-  data <- data %>% 
+    ungroup()
+
+  data <- data %>%
     group_by(unique_pt_id, seqnum)  %>%
     mutate(
       abx_qualifying = ifelse(
-        (aim == 2 & (abx_run_length >= 4 | 
-                       (death == 1 & !is.na(death_bcx_day) & abx_run_length >= death_bcx_day & ((lag(abx_daily_new)[length(lag(abx_daily_new))] == 1 & !is.na(lag(abx_daily_new)[length(lag(abx_daily_new))])) | (abx_daily_new == 1 & !is.na(abx_daily_new)))) | 
+        (aim == 2 & (abx_run_length >= 4 |
+                       (death == 1 & !is.na(death_bcx_day) & abx_run_length >= death_bcx_day & ((lag(abx_daily_new)[length(lag(abx_daily_new))] == 1 & !is.na(lag(abx_daily_new)[length(lag(abx_daily_new))])) | (abx_daily_new == 1 & !is.na(abx_daily_new)))) |
                        (transfer_acute == 1 & !is.na(transfer_acute_bcx_day) & abx_run_length >= transfer_acute_bcx_day & ((lag(abx_daily_new)[length(lag(abx_daily_new))] == 1 & !is.na(lag(abx_daily_new)[length(lag(abx_daily_new))])) | (abx_daily_new == 1 & !is.na(abx_daily_new)))))) |
-          (aim == 3 & (abx_run_length >= 4 | 
-                         (death == 1 & !is.na(death_bcx_day) & abx_run_length >= death_bcx_day & ((lag(abx_daily_new)[length(lag(abx_daily_new))] == 1 & !is.na(lag(abx_daily_new)[length(lag(abx_daily_new))])) | (abx_daily_new == 1 & !is.na(abx_daily_new)))) | 
-                         (transfer_acute == 1 & !is.na(transfer_acute_bcx_day) & abx_run_length >= transfer_acute_bcx_day & ((lag(abx_daily_new)[length(lag(abx_daily_new))] == 1 & !is.na(lag(abx_daily_new)[length(lag(abx_daily_new))])) | (abx_daily_new == 1 & !is.na(abx_daily_new)))) | 
-                         (day==ALL_DAYS & transfer_acute == 0 & death == 0 & !is.na(disch_bcx_day) & abx_run_length >= disch_bcx_day & (abx_daily_new == 1 & !is.na(abx_daily_new))))), 
+          (aim == 3 & (abx_run_length >= 4 |
+                         (death == 1 & !is.na(death_bcx_day) & abx_run_length >= death_bcx_day & ((lag(abx_daily_new)[length(lag(abx_daily_new))] == 1 & !is.na(lag(abx_daily_new)[length(lag(abx_daily_new))])) | (abx_daily_new == 1 & !is.na(abx_daily_new)))) |
+                         (transfer_acute == 1 & !is.na(transfer_acute_bcx_day) & abx_run_length >= transfer_acute_bcx_day & ((lag(abx_daily_new)[length(lag(abx_daily_new))] == 1 & !is.na(lag(abx_daily_new)[length(lag(abx_daily_new))])) | (abx_daily_new == 1 & !is.na(abx_daily_new)))) |
+                         (day==ALL_DAYS & transfer_acute == 0 & death == 0 & !is.na(disch_bcx_day) & abx_run_length >= disch_bcx_day & (abx_daily_new == 1 & !is.na(abx_daily_new))))),
         1, 0),
       abx_qualifying_ep = ifelse(any(abx_qualifying == 1), 1, 0)
     ) %>%
     ungroup()
-  
+
   return(data)
 }

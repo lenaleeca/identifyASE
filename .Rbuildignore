@@ -1,3 +1,2 @@
-^Sepsis\.Rproj$
+^.*\.Rproj$
 ^\.Rproj\.user$
-^ASE\.Rproj$

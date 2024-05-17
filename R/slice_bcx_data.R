@@ -8,7 +8,7 @@ options(scipen = 999)
 
 #' Slice Data Around Blood Culture Days
 #'
-#' This function slices daily data around blood culture days for each patient, creating a list of data frames 
+#' This function slices daily data around blood culture days for each patient, creating a list of data frames
 #' containing the specified window of days before and after each blood culture day.
 #'
 #' @param data A data frame containing patient data with columns `unique_pt_id`, `seqnum`, `day`, and `bcx_daily`.
@@ -23,27 +23,26 @@ options(scipen = 999)
 #'   bcx_daily = c(0, 1, 0, 0, 1, 0)
 #' )
 #' slice_bcx_data(data)
-
-# Function to slice daily data around blood culture days
-slice_bcx_data <- function(data, 
+#' @export
+slice_bcx_data <- function(data,
                            slide_day_before=2,  # this equals to # of window days
                            slide_day_after=6    # this equals to # of window days+4: 6 or 7
 ) {
-  
+
   # Filter out patients without any blood culture days
   filtered_data <- data %>%
     group_by(unique_pt_id, seqnum) %>%
     filter(any(bcx_daily == 1)) %>%
-    ungroup() %>% 
+    ungroup() %>%
     arrange(unique_pt_id, seqnum, day)
-  
+
   # Split the data by patient
   patient_data_list <- filtered_data %>%
-    group_split(unique_pt_id, seqnum) 
-  
+    group_split(unique_pt_id, seqnum)
+
   # Initialize an empty list to store the slices with IDs
   sliced_data_list <- list()
-  
+
   # Process each patient's data
   for (patient_data in patient_data_list) {
     unique_pt_id <- unique(patient_data$unique_pt_id)
@@ -57,6 +56,6 @@ slice_bcx_data <- function(data,
       sliced_data_list <- append(sliced_data_list, list(slice_info))
     }
   }
-  
+
   return(sliced_data_list)
 }
