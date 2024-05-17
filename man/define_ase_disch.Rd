@@ -4,7 +4,18 @@
 \alias{define_ase_disch}
 \title{Define Acute Sepsis Episodes and Discharge Information}
 \usage{
-define_ase_disch(daily_data, transferout_id, cohort_id = NULL)
+define_ase_disch(
+  daily_data,
+  transferout_id,
+  cohort_id = NULL,
+  creat_hi_lo_ratio = 2,
+  creat_hi_cutoff = 44,
+  tbili_hi_cutoff = 34.2,
+  tbili_hi_lo_ratio = 2,
+  lact_hi_cutoff = 2,
+  plt_lo_cutoff = 100,
+  plt_lo_hi_ratio = 0.5
+)
 }
 \arguments{
 \item{daily_data}{A data frame containing daily patient data with columns \code{unique_pt_id}, \code{seqnum}, \code{day}, \code{death}, \code{ALL_DAYS}, and other clinical variables.}
@@ -12,6 +23,20 @@ define_ase_disch(daily_data, transferout_id, cohort_id = NULL)
 \item{transferout_id}{A vector of sequence numbers (\code{seqnum}) indicating patients who were transferred out acutely.}
 
 \item{cohort_id}{A list of two vectors: the first vector contains patient IDs (\code{unique_pt_id}) and the second vector contains sequence numbers (\code{seqnum}) for selecting a sub-cohort (default is NULL).}
+
+\item{creat_hi_lo_ratio}{The ratio of high to low creatinine levels to define renal dysfunction (default is 2).}
+
+\item{creat_hi_cutoff}{The cutoff value for high creatinine levels (default is 44).}
+
+\item{tbili_hi_cutoff}{The cutoff value for high bilirubin levels (default is 34.2).}
+
+\item{tbili_hi_lo_ratio}{The ratio of high to low bilirubin levels to define liver dysfunction (default is 2).}
+
+\item{lact_hi_cutoff}{The cutoff value for high lactate levels (default is 2).}
+
+\item{plt_lo_cutoff}{The cutoff value for low platelet counts (default is 100).}
+
+\item{plt_lo_hi_ratio}{The ratio of low to high platelet counts to define hematologic dysfunction (default is 0.5).}
 }
 \value{
 A list containing sepsis episode IDs, final combined data for 2-day and 3-day windows, and the respective data frames.

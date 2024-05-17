@@ -4,12 +4,36 @@
 \alias{add_aod_daily}
 \title{Add Acute Organ Dysfunction (AOD) Daily Variables}
 \usage{
-add_aod_daily(data, window_day_col)
+add_aod_daily(
+  data,
+  window_day_col,
+  creat_hi_lo_ratio = 2,
+  creat_hi_cutoff = 44,
+  tbili_hi_cutoff = 34.2,
+  tbili_hi_lo_ratio = 2,
+  lact_hi_cutoff = 2,
+  plt_lo_cutoff = 100,
+  plt_lo_hi_ratio = 0.5
+)
 }
 \arguments{
-\item{data}{A data frame containing patient data with columns \code{unique_pt_id}, \code{seqnum}, \code{day}, and various clinical measurements.}
+\item{data}{A data frame containing patient data with columns \code{unique_pt_id}, \code{seqnum}, \code{day}, \code{vasop_daily}, \code{imv_daily}, \code{lact_daily_hi}, \code{tbili_daily_hi}, \code{tbili_baseline}, \code{creat_daily_hi}, \code{creat_baseline}, \code{plt_daily_lo}, \code{plt_baseline}, and \code{ELX_All_33}.}
 
 \item{window_day_col}{A string specifying the name of the column indicating the presence of blood culture days within a specified window.}
+
+\item{creat_hi_lo_ratio}{The ratio of high to low creatinine levels to define renal dysfunction (default is 2).}
+
+\item{creat_hi_cutoff}{The cutoff value for high creatinine levels (default is 44).}
+
+\item{tbili_hi_cutoff}{The cutoff value for high bilirubin levels (default is 34.2).}
+
+\item{tbili_hi_lo_ratio}{The ratio of high to low bilirubin levels to define liver dysfunction (default is 2).}
+
+\item{lact_hi_cutoff}{The cutoff value for high lactate levels (default is 2).}
+
+\item{plt_lo_cutoff}{The cutoff value for low platelet counts (default is 100).}
+
+\item{plt_lo_hi_ratio}{The ratio of low to high platelet counts to define hematologic dysfunction (default is 0.5).}
 }
 \value{
 A data frame with new columns for each type of AOD and additional calculations based on the specified window.

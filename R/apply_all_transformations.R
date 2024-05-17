@@ -5,6 +5,13 @@
 #' @param sliced_data_list A list of lists, where each list contains `unique_pt_id`, `seqnum`, and a data frame (`data`) with sliced data.
 #' @param window_day_col A string specifying the name of the column indicating the presence of blood culture days within a specified window.
 #' @param aim An integer specifying the aim criteria for qualifying antimicrobial treatments: 2 for specific criteria or 3 for extended criteria.
+#' @param creat_hi_lo_ratio The ratio of high to low creatinine levels to define renal dysfunction (default is 2).
+#' @param creat_hi_cutoff The cutoff value for high creatinine levels (default is 44).
+#' @param tbili_hi_cutoff The cutoff value for high bilirubin levels (default is 34.2).
+#' @param tbili_hi_lo_ratio The ratio of high to low bilirubin levels to define liver dysfunction (default is 2).
+#' @param lact_hi_cutoff The cutoff value for high lactate levels (default is 2).
+#' @param plt_lo_cutoff The cutoff value for low platelet counts (default is 100).
+#' @param plt_lo_hi_ratio The ratio of low to high platelet counts to define hematologic dysfunction (default is 0.5).
 #' @return A list of updated slices with the transformations applied.
 #' @examples
 #' # Example sliced_data_list
@@ -18,11 +25,28 @@
 #' @import future
 #' @import furrr
 #' @export
-apply_all_transformations <- function(sliced_data_list, window_day_col, aim) {
+apply_all_transformations <- function(sliced_data_list,
+                                      window_day_col,
+                                      aim,
+                                      creat_hi_lo_ratio = 2,
+                                      creat_hi_cutoff = 44,
+                                      tbili_hi_cutoff = 34.2,
+                                      tbili_hi_lo_ratio = 2,
+                                      lact_hi_cutoff = 2,
+                                      plt_lo_cutoff = 100,
+                                      plt_lo_hi_ratio = 0.5) {
   plan(multisession)  # Set up parallel processing
 
   updated_sliced_data_list <- future_map(sliced_data_list, function(slice_info) {
-    slice_info$data <- add_aod_daily(slice_info$data, window_day_col)
+    slice_info$data <- add_aod_daily(slice_info$data,
+                                     window_day_col,
+                                     creat_hi_lo_ratio,
+                                     creat_hi_cutoff,
+                                     tbili_hi_cutoff,
+                                     tbili_hi_lo_ratio,
+                                     lact_hi_cutoff,
+                                     plt_lo_cutoff,
+                                     plt_lo_hi_ratio)
     slice_info$data <- qualifying_abx_duration(slice_info$data, window_day_col, aim)
     slice_info$data <- define_sepsis(slice_info$data)
     return(slice_info)

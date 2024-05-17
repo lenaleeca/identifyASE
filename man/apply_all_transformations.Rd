@@ -4,7 +4,18 @@
 \alias{apply_all_transformations}
 \title{Apply All Transformations to Each Slice in the List}
 \usage{
-apply_all_transformations(sliced_data_list, window_day_col, aim)
+apply_all_transformations(
+  sliced_data_list,
+  window_day_col,
+  aim,
+  creat_hi_lo_ratio = 2,
+  creat_hi_cutoff = 44,
+  tbili_hi_cutoff = 34.2,
+  tbili_hi_lo_ratio = 2,
+  lact_hi_cutoff = 2,
+  plt_lo_cutoff = 100,
+  plt_lo_hi_ratio = 0.5
+)
 }
 \arguments{
 \item{sliced_data_list}{A list of lists, where each list contains \code{unique_pt_id}, \code{seqnum}, and a data frame (\code{data}) with sliced data.}
@@ -12,6 +23,20 @@ apply_all_transformations(sliced_data_list, window_day_col, aim)
 \item{window_day_col}{A string specifying the name of the column indicating the presence of blood culture days within a specified window.}
 
 \item{aim}{An integer specifying the aim criteria for qualifying antimicrobial treatments: 2 for specific criteria or 3 for extended criteria.}
+
+\item{creat_hi_lo_ratio}{The ratio of high to low creatinine levels to define renal dysfunction (default is 2).}
+
+\item{creat_hi_cutoff}{The cutoff value for high creatinine levels (default is 44).}
+
+\item{tbili_hi_cutoff}{The cutoff value for high bilirubin levels (default is 34.2).}
+
+\item{tbili_hi_lo_ratio}{The ratio of high to low bilirubin levels to define liver dysfunction (default is 2).}
+
+\item{lact_hi_cutoff}{The cutoff value for high lactate levels (default is 2).}
+
+\item{plt_lo_cutoff}{The cutoff value for low platelet counts (default is 100).}
+
+\item{plt_lo_hi_ratio}{The ratio of low to high platelet counts to define hematologic dysfunction (default is 0.5).}
 }
 \value{
 A list of updated slices with the transformations applied.

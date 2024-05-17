@@ -14,6 +14,6 @@ Suggests: knitr, rmarkdown
 VignetteBuilder: knitr
 Imports: dplyr, purrr, future, furrr
 NeedsCompilation: no
-Packaged: 2024-05-17 21:04:33 UTC; lenal
+Packaged: 2024-05-17 22:54:47 UTC; lenal
 Author: Na Li [aut, cre] (<https://orcid.org/0000-0002-4803-0984>)
 Maintainer: Na Li <Na.Li@ucalgary.ca>

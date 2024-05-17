@@ -5,6 +5,13 @@
 #' @param daily_data A data frame containing daily patient data with columns `unique_pt_id`, `seqnum`, `day`, `death`, `ALL_DAYS`, and other clinical variables.
 #' @param transferout_id A vector of sequence numbers (`seqnum`) indicating patients who were transferred out acutely.
 #' @param cohort_id A list of two vectors: the first vector contains patient IDs (`unique_pt_id`) and the second vector contains sequence numbers (`seqnum`) for selecting a sub-cohort (default is NULL).
+#' @param creat_hi_lo_ratio The ratio of high to low creatinine levels to define renal dysfunction (default is 2).
+#' @param creat_hi_cutoff The cutoff value for high creatinine levels (default is 44).
+#' @param tbili_hi_cutoff The cutoff value for high bilirubin levels (default is 34.2).
+#' @param tbili_hi_lo_ratio The ratio of high to low bilirubin levels to define liver dysfunction (default is 2).
+#' @param lact_hi_cutoff The cutoff value for high lactate levels (default is 2).
+#' @param plt_lo_cutoff The cutoff value for low platelet counts (default is 100).
+#' @param plt_lo_hi_ratio The ratio of low to high platelet counts to define hematologic dysfunction (default is 0.5).
 #' @return A list containing sepsis episode IDs, final combined data for 2-day and 3-day windows, and the respective data frames.
 #' @examples
 #' # Example daily data frame
@@ -35,8 +42,16 @@
 #' @import future
 #' @import furrr
 #' @export
-define_ase <- function(daily_data, transferout_id,
-                          cohort_id = NULL) {
+define_ase <- function(daily_data,
+                       transferout_id,
+                       cohort_id = NULL,
+                       creat_hi_lo_ratio = 2,
+                       creat_hi_cutoff = 44,
+                       tbili_hi_cutoff = 34.2,
+                       tbili_hi_lo_ratio = 2,
+                       lact_hi_cutoff = 2,
+                       plt_lo_cutoff = 100,
+                       plt_lo_hi_ratio = 0.5) {
 
   ###### Data formatting #########
   # correct first inpatient day as 1 instead of 0
@@ -73,8 +88,26 @@ define_ase <- function(daily_data, transferout_id,
   sliced_data_list_window3 <- slice_bcx_data(daily_data, slide_day_before=3, slide_day_after=7)
 
   # Apply add_window_day to each slice in the sliced_data_list; this function is slow
-  updated_sliced_data_list <- apply_all_transformations(sliced_data_list, window_day_col="window_day", aim=2)
-  updated_sliced_data_list_window3 <- apply_all_transformations(sliced_data_list_window3, window_day_col="window_day3", aim=2)
+  updated_sliced_data_list <- apply_all_transformations(sliced_data_list,
+                                                        window_day_col="window_day",
+                                                        aim=2,
+                                                        creat_hi_lo_ratio,
+                                                        creat_hi_cutoff,
+                                                        tbili_hi_cutoff,
+                                                        tbili_hi_lo_ratio,
+                                                        lact_hi_cutoff,
+                                                        plt_lo_cutoff,
+                                                        plt_lo_hi_ratio)
+  updated_sliced_data_list_window3 <- apply_all_transformations(sliced_data_list_window3,
+                                                                window_day_col="window_day3",
+                                                                aim=2,
+                                                                creat_hi_lo_ratio,
+                                                                creat_hi_cutoff,
+                                                                tbili_hi_cutoff,
+                                                                tbili_hi_lo_ratio,
+                                                                lact_hi_cutoff,
+                                                                plt_lo_cutoff,
+                                                                plt_lo_hi_ratio)
 
   final_combined_data <- bind_rows(lapply(updated_sliced_data_list, function(slice_info) slice_info$data))
   final_combined_data <- final_combined_data[!duplicated(final_combined_data), ]
