@@ -20,6 +20,10 @@ options(scipen = 999)
 #'   list(unique_pt_id = 2, seqnum = 2, data = data.frame(day = 1:3, bcx_daily = c(0, 1, 0)))
 #' )
 #' search_by_seqnum(sliced_data_list, 1)
+#' @import dplyr
+#' @import purrr
+#' @import future
+#' @import furrr
 #' @export
 search_by_seqnum <- function(sliced_data_list, target_seqnum) {
   results <- lapply(sliced_data_list, function(slice_info) {

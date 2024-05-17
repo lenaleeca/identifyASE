@@ -30,6 +30,10 @@
 #' )
 #' transferout_id <- c(1)
 #' define_ase_disch(daily_data, transferout_id)
+#' @import dplyr
+#' @import purrr
+#' @import future
+#' @import furrr
 #' @export
 define_ase_disch <- function(daily_data, transferout_id,
                                 cohort_id = NULL) {

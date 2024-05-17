@@ -20,6 +20,10 @@
 #'   window_day = c(1, 1, 0, 1, 1, 0)
 #' )
 #' qualifying_abx_duration(data, "window_day", 2)
+#' @import dplyr
+#' @import purrr
+#' @import future
+#' @import furrr
 #' @export
 qualifying_abx_duration <- function(data, window_day_col="window_day", aim=2) {
   data <- data %>%

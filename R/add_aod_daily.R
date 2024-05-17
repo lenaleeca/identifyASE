@@ -25,6 +25,10 @@
 #' )
 #' data <- add_window_day(data, "window_day", 1)
 #' add_aod_daily(data, "window_day")
+#' @import dplyr
+#' @import purrr
+#' @import future
+#' @import furrr
 #' @export
 add_aod_daily <- function(data, window_day_col) {
   data <- data %>%

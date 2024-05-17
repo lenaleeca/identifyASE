@@ -23,6 +23,10 @@ options(scipen = 999)
 #'   bcx_daily = c(0, 1, 0, 0, 1, 0)
 #' )
 #' slice_bcx_data(data)
+#' @import dplyr
+#' @import purrr
+#' @import future
+#' @import furrr
 #' @export
 slice_bcx_data <- function(data,
                            slide_day_before=2,  # this equals to # of window days

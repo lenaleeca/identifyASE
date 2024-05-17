@@ -17,6 +17,10 @@
 #'   abx_qualifying_ep = c(1, 1, 1, 0, 1, 1)
 #' )
 #' define_sepsis(data)
+#' @import dplyr
+#' @import purrr
+#' @import future
+#' @import furrr
 #' @export
 define_sepsis <- function(data) {
   data <- data %>%

@@ -6,14 +6,14 @@ Authors@R:
            comment = c(ORCID = "https://orcid.org/0000-0002-4803-0984"))
 Description: What the package does (one paragraph).
 License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+        license
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.1
 Suggests: knitr, rmarkdown
 VignetteBuilder: knitr
-Imports:
-    dplyr,
-    purrr,
-    future,
-    furrr
+Imports: dplyr, purrr, future, furrr
+NeedsCompilation: no
+Packaged: 2024-05-17 21:04:33 UTC; lenal
+Author: Na Li [aut, cre] (<https://orcid.org/0000-0002-4803-0984>)
+Maintainer: Na Li <Na.Li@ucalgary.ca>
