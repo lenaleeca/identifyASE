@@ -82,5 +82,5 @@ print(result)
 
 ## License
 
-This package is licensed under the GPL-3 License. See the LICENSE file for details.
+This package is licensed under the MIT License. See the LICENSE file for details.
 
