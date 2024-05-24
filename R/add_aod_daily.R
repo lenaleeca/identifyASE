@@ -3,7 +3,7 @@
 #' This function calculates and adds daily indicators for various types of acute organ dysfunction (AOD) to the data,
 #' based on given criteria for cardiovascular, respiratory, lactate, liver, renal, and hematologic dysfunctions.
 #'
-#' @param data A data frame containing patient data with columns `unique_pt_id`, `seqnum`, `day`, `vasop_daily`, `imv_daily`, `lact_daily_hi`, `tbili_daily_hi`, `tbili_baseline`, `creat_daily_hi`, `creat_baseline`, `plt_daily_lo`, `plt_baseline`, and `ELX_All_33`.
+#' @param data A data frame containing patient data with columns `unique_pt_id`, `seqnum`, `day`, `vasop_daily`, `imv_daily`, `lact_daily_hi`, `tbili_daily_hi`, `tbili_baseline`, `creat_daily_hi`, `creat_baseline`, `plt_daily_lo`, `plt_baseline`, and `esrd_icd`.
 #' @param window_day_col A string specifying the name of the column indicating the presence of blood culture days within a specified window.
 #' @param creat_hi_lo_ratio The ratio of high to low creatinine levels to define renal dysfunction (default is 2).
 #' @param creat_hi_cutoff The cutoff value for high creatinine levels (default is 44).
@@ -28,7 +28,7 @@
 #'   creat_baseline = c(20, 20, 20, 25, 25, 25),
 #'   plt_daily_lo = c(150, 80, 90, 110, 70, 50),
 #'   plt_baseline = c(200, 200, 200, 180, 180, 180),
-#'   ELX_All_33 = c(0, 0, 0, 0, 0, 0)
+#'   esrd_icd = c(0, 0, 0, 0, 0, 0)
 #' )
 #' data <- add_window_day(data, "window_day", 1)
 #' add_aod_daily(data, "window_day")
@@ -55,7 +55,7 @@ add_aod_daily <- function(data,
       aod_imv_daily = ifelse(imv_daily == 1 & (lag(imv_daily) == 0 | is.na(lag(imv_daily))), 1, 0),
       aod_lactate_daily = ifelse(lact_daily_hi >= lact_hi_cutoff, 1, 0),
       aod_liver_daily = ifelse(tbili_daily_hi >= tbili_hi_lo_ratio * tbili_baseline & tbili_daily_hi >= tbili_hi_cutoff & tbili_daily_hi >= 0 & tbili_baseline >= 0, 1, 0),
-      aod_renal_daily = ifelse(creat_daily_hi >= creat_hi_lo_ratio * creat_baseline & creat_daily_hi >= creat_hi_cutoff & creat_baseline >= 0 & creat_daily_hi >= 0 & creat_daily_hi >= creat_baseline & ELX_All_33 != 1, 1, 0),
+      aod_renal_daily = ifelse(creat_daily_hi >= creat_hi_lo_ratio * creat_baseline & creat_daily_hi >= creat_hi_cutoff & creat_baseline >= 0 & creat_daily_hi >= 0 & creat_daily_hi >= creat_baseline & esrd_icd != 1, 1, 0),
       aod_heme_daily = ifelse(plt_baseline >= plt_lo_cutoff & plt_baseline >= 0 & plt_daily_lo < plt_lo_cutoff & plt_daily_lo >= 0 & plt_daily_lo <= plt_lo_hi_ratio * plt_baseline & plt_daily_lo >= 0, 1, 0)
     ) %>%
     mutate(
@@ -79,7 +79,7 @@ add_aod_daily <- function(data,
     ungroup() %>%
     mutate(
       aod_liver_daily_window = ifelse(tbili_daily_hi >= tbili_hi_lo_ratio * tbili_baseline_window & tbili_daily_hi >= tbili_hi_cutoff & tbili_daily_hi >= 0 & tbili_baseline_window >= 0, 1, 0),
-      aod_renal_daily_window = ifelse(creat_daily_hi >= creat_hi_lo_ratio * creat_baseline_window & creat_daily_hi >= 0 & creat_baseline_window >= 0 & creat_daily_hi >= creat_hi_cutoff & creat_daily_hi >= creat_baseline_window & ELX_All_33 != 1, 1, 0),
+      aod_renal_daily_window = ifelse(creat_daily_hi >= creat_hi_lo_ratio * creat_baseline_window & creat_daily_hi >= 0 & creat_baseline_window >= 0 & creat_daily_hi >= creat_hi_cutoff & creat_daily_hi >= creat_baseline_window & esrd_icd != 1, 1, 0),
       aod_heme_daily_window = ifelse(plt_baseline_window >= plt_lo_cutoff & plt_baseline_window >= 0 & plt_daily_lo < plt_lo_cutoff & plt_daily_lo >= 0 & plt_daily_lo <= plt_lo_hi_ratio * plt_baseline_window & plt_daily_lo >= 0, 1, 0),
       aod_liver_daily_window = replace(aod_liver_daily_window, is.na(aod_liver_daily_window), 0),
       aod_renal_daily_window = replace(aod_renal_daily_window, is.na(aod_renal_daily_window), 0),

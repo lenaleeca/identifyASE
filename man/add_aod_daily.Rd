@@ -17,7 +17,7 @@ add_aod_daily(
 )
 }
 \arguments{
-\item{data}{A data frame containing patient data with columns \code{unique_pt_id}, \code{seqnum}, \code{day}, \code{vasop_daily}, \code{imv_daily}, \code{lact_daily_hi}, \code{tbili_daily_hi}, \code{tbili_baseline}, \code{creat_daily_hi}, \code{creat_baseline}, \code{plt_daily_lo}, \code{plt_baseline}, and \code{ELX_All_33}.}
+\item{data}{A data frame containing patient data with columns \code{unique_pt_id}, \code{seqnum}, \code{day}, \code{vasop_daily}, \code{imv_daily}, \code{lact_daily_hi}, \code{tbili_daily_hi}, \code{tbili_baseline}, \code{creat_daily_hi}, \code{creat_baseline}, \code{plt_daily_lo}, \code{plt_baseline}, and \code{esrd_icd}.}
 
 \item{window_day_col}{A string specifying the name of the column indicating the presence of blood culture days within a specified window.}
 
@@ -57,7 +57,7 @@ data <- data.frame(
   creat_baseline = c(20, 20, 20, 25, 25, 25),
   plt_daily_lo = c(150, 80, 90, 110, 70, 50),
   plt_baseline = c(200, 200, 200, 180, 180, 180),
-  ELX_All_33 = c(0, 0, 0, 0, 0, 0)
+  esrd_icd = c(0, 0, 0, 0, 0, 0)
 )
 data <- add_window_day(data, "window_day", 1)
 add_aod_daily(data, "window_day")
