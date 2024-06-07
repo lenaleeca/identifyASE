@@ -68,7 +68,7 @@ daily_data <- data.frame(
   plt_daily_hi = c(150, 80, 90, 110, 70, 50),
   plt_daily_lo = c(150, 80, 90, 110, 70, 50),
   plt_baseline = c(200, 200, 200, 180, 180, 180),
-  ELX_All_33 = c(0, 0, 0, 0, 0, 0),
+  esrd_icd = c(0, 0, 0, 0, 0, 0),
   new_abx_start = c(0, 1, 0, 0, 1, 0),
   abx_daily = c(0, 1, 1, 0, 1, 1)
 )
