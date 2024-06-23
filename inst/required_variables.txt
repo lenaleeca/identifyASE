@@ -15,7 +15,7 @@ Required Input Variables
 - `creat_baseline`: Baseline creatinine levels.
 - `plt_daily_lo`: Low platelet count on that day.
 - `plt_baseline`: Baseline platelet count.
-- `ELX_All_33`: Exclusion indicator.
+- `esrd_icd`: Exclusion indicator.
 - `new_abx_start`: Indicator for new antibiotic start on that day.
 - `abx_daily`: Indicator for antibiotic use on that day.
 - `death`: Indicator for death on that day.
