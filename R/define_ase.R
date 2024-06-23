@@ -5,6 +5,7 @@
 #' @param daily_data A data frame containing daily patient data with columns `unique_pt_id`, `seqnum`, `day`, `death`, `ALL_DAYS`, and other clinical variables.
 #' @param transferout_id A vector of sequence numbers (`seqnum`) indicating patients who were transferred out acutely.
 #' @param cohort_id A list of two vectors: the first vector contains patient IDs (`unique_pt_id`) and the second vector contains sequence numbers (`seqnum`) for selecting a sub-cohort (default is NULL).
+#' @param abx_days An integer specifying the number of consecutive antimicrobial days.
 #' @param creat_hi_lo_ratio The ratio of high to low creatinine levels to define renal dysfunction (default is 2).
 #' @param creat_hi_cutoff The cutoff value for high creatinine levels (default is 44).
 #' @param tbili_hi_cutoff The cutoff value for high bilirubin levels (default is 34.2).
@@ -45,6 +46,7 @@
 define_ase <- function(daily_data,
                        transferout_id,
                        cohort_id = NULL,
+                       abx_days = 4,
                        creat_hi_lo_ratio = 2,
                        creat_hi_cutoff = 44,
                        tbili_hi_cutoff = 34.2,
@@ -82,15 +84,18 @@ define_ase <- function(daily_data,
   # add bcx window +/-2 days and +/-3 days
   daily_data <- add_window_day(daily_data, window_day_col="window_day", window=2)
   daily_data <- add_window_day(daily_data, window_day_col="window_day3", window=3)
+  daily_data <- add_window_day(daily_data, window_day_col="window_day4", window=4)
 
   # slice patient daily data around blood culture days
   sliced_data_list <- slice_bcx_data(daily_data, slide_day_before=2, slide_day_after=6)
   sliced_data_list_window3 <- slice_bcx_data(daily_data, slide_day_before=3, slide_day_after=7)
+  sliced_data_list_window4 <- slice_bcx_data(daily_data, slide_day_before=4, slide_day_after=8)
 
   # Apply add_window_day to each slice in the sliced_data_list; this function is slow
   updated_sliced_data_list <- apply_all_transformations(sliced_data_list,
                                                         window_day_col="window_day",
                                                         aim=2,
+                                                        abx_days,
                                                         creat_hi_lo_ratio,
                                                         creat_hi_cutoff,
                                                         tbili_hi_cutoff,
@@ -101,6 +106,18 @@ define_ase <- function(daily_data,
   updated_sliced_data_list_window3 <- apply_all_transformations(sliced_data_list_window3,
                                                                 window_day_col="window_day3",
                                                                 aim=2,
+                                                                abx_days,
+                                                                creat_hi_lo_ratio,
+                                                                creat_hi_cutoff,
+                                                                tbili_hi_cutoff,
+                                                                tbili_hi_lo_ratio,
+                                                                lact_hi_cutoff,
+                                                                plt_lo_cutoff,
+                                                                plt_lo_hi_ratio)
+  updated_sliced_data_list_window4 <- apply_all_transformations(sliced_data_list_window4,
+                                                                window_day_col="window_day4",
+                                                                aim=3,
+                                                                abx_days,
                                                                 creat_hi_lo_ratio,
                                                                 creat_hi_cutoff,
                                                                 tbili_hi_cutoff,
@@ -113,6 +130,8 @@ define_ase <- function(daily_data,
   final_combined_data <- final_combined_data[!duplicated(final_combined_data), ]
   final_combined_data_window3 <- bind_rows(lapply(updated_sliced_data_list_window3, function(slice_info) slice_info$data))
   final_combined_data_window3 <- final_combined_data_window3[!duplicated(final_combined_data_window3), ]
+  final_combined_data_window4 <- bind_rows(lapply(updated_sliced_data_list_window4, function(slice_info) slice_info$data))
+  final_combined_data_window4 <- final_combined_data_window4[!duplicated(final_combined_data_window4), ]
 
   #### sepsis seqnum list: bcs +/-2days window
   sepsis_v2_com_rev_seqnum <- unique(final_combined_data$seqnum[final_combined_data$sepsis_com_v2==1])
@@ -126,17 +145,24 @@ define_ase <- function(daily_data,
   sepsis_v2_hosp_rev_seqnum_window3 <- sepsis_v2_hosp_rev_seqnum_window3[!(sepsis_v2_hosp_rev_seqnum_window3 %in% sepsis_v2_com_rev_seqnum_window3)]
   sepsis_v2_rev_seqnum_window3 <- unique(c(sepsis_v2_com_rev_seqnum_window3, sepsis_v2_hosp_rev_seqnum_window3))
 
+  #### sepsis seqnum list: bcs +/-4days window
+  sepsis_v2_com_rev_seqnum_window4 <- unique(final_combined_data_window4$seqnum[final_combined_data_window4$sepsis_com_v2==1])
+  sepsis_v2_hosp_rev_seqnum_window4 <- unique(final_combined_data_window4$seqnum[final_combined_data_window4$sepsis_hosp_v2==1])
+  sepsis_v2_hosp_rev_seqnum_window4 <- sepsis_v2_hosp_rev_seqnum_window4[!(sepsis_v2_hosp_rev_seqnum_window4 %in% sepsis_v2_com_rev_seqnum_window4)]
+  sepsis_v2_rev_seqnum_window4 <- unique(c(sepsis_v2_com_rev_seqnum_window4, sepsis_v2_hosp_rev_seqnum_window4))
 
   ase_pid_list0 <- list(sepsis_v2_com_rev_seqnum, sepsis_v2_hosp_rev_seqnum, sepsis_v2_rev_seqnum)
   names(ase_pid_list0) <- c("community-onset", "hospital-onset", "all_ase")
   ase_pid_list1 <- list(sepsis_v2_com_rev_seqnum_window3, sepsis_v2_hosp_rev_seqnum_window3, sepsis_v2_rev_seqnum_window3)
   names(ase_pid_list1) <- c("community-onset", "hospital-onset", "all_ase")
+  ase_pid_list2 <- list(sepsis_v2_com_rev_seqnum_window4, sepsis_v2_hosp_rev_seqnum_window4, sepsis_v2_rev_seqnum_window4)
+  names(ase_pid_list2) <- c("community-onset", "hospital-onset", "all_ase")
 
-  ase_pid_list <- list(ase_pid_list0, ase_pid_list1)
-  names(ase_pid_list) <- c("Original", "Window_day_3")
+  ase_pid_list <- list(ase_pid_list0, ase_pid_list1, ase_pid_list2)
+  names(ase_pid_list) <- c("Original", "Window_day_3", "Window_day_4")
 
-  result_list <- list(ase_pid_list, final_combined_data, final_combined_data_window3)
-  names(result_list) <- c("IDs", "Data_2days", "Data_3days")
+  result_list <- list(ase_pid_list, final_combined_data, final_combined_data_window3, final_combined_data_window4)
+  names(result_list) <- c("IDs", "Data_2days", "Data_3days", "Data_4days")
 
   return(result_list)
 }

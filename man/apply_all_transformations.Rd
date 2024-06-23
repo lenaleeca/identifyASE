@@ -8,6 +8,7 @@ apply_all_transformations(
   sliced_data_list,
   window_day_col,
   aim,
+  abx_days = 4,
   creat_hi_lo_ratio = 2,
   creat_hi_cutoff = 44,
   tbili_hi_cutoff = 34.2,
@@ -23,6 +24,8 @@ apply_all_transformations(
 \item{window_day_col}{A string specifying the name of the column indicating the presence of blood culture days within a specified window.}
 
 \item{aim}{An integer specifying the aim criteria for qualifying antimicrobial treatments: 2 for specific criteria or 3 for extended criteria.}
+
+\item{abx_days}{An integer specifying the number of consecutive antimicrobial days.}
 
 \item{creat_hi_lo_ratio}{The ratio of high to low creatinine levels to define renal dysfunction (default is 2).}
 

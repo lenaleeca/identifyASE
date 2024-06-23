@@ -4,7 +4,12 @@
 \alias{qualifying_abx_duration}
 \title{Capture Qualifying Antimicrobials}
 \usage{
-qualifying_abx_duration(data, window_day_col = "window_day", aim = 2)
+qualifying_abx_duration(
+  data,
+  window_day_col = "window_day",
+  aim = 2,
+  abx_days = 4
+)
 }
 \arguments{
 \item{data}{A data frame containing patient data with columns \code{unique_pt_id}, \code{seqnum}, \code{day}, \code{new_abx_start}, \code{abx_daily}, \code{death}, \code{transfer_acute}, and \code{ALL_DAYS}.}
@@ -12,6 +17,8 @@ qualifying_abx_duration(data, window_day_col = "window_day", aim = 2)
 \item{window_day_col}{A string specifying the name of the column indicating the presence of blood culture days within a specified window (default is "window_day").}
 
 \item{aim}{An integer specifying the aim criteria: 2 for specific criteria or 3 for extended criteria (default is 2).}
+
+\item{abx_days}{An integer specifying the number of consecutive antimicrobial days.}
 }
 \value{
 A data frame with new columns indicating qualifying antimicrobial treatments and their episodes.

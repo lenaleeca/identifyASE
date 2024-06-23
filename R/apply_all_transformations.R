@@ -5,6 +5,7 @@
 #' @param sliced_data_list A list of lists, where each list contains `unique_pt_id`, `seqnum`, and a data frame (`data`) with sliced data.
 #' @param window_day_col A string specifying the name of the column indicating the presence of blood culture days within a specified window.
 #' @param aim An integer specifying the aim criteria for qualifying antimicrobial treatments: 2 for specific criteria or 3 for extended criteria.
+#' @param abx_days An integer specifying the number of consecutive antimicrobial days.
 #' @param creat_hi_lo_ratio The ratio of high to low creatinine levels to define renal dysfunction (default is 2).
 #' @param creat_hi_cutoff The cutoff value for high creatinine levels (default is 44).
 #' @param tbili_hi_cutoff The cutoff value for high bilirubin levels (default is 34.2).
@@ -28,6 +29,7 @@
 apply_all_transformations <- function(sliced_data_list,
                                       window_day_col,
                                       aim,
+                                      abx_days = 4,
                                       creat_hi_lo_ratio = 2,
                                       creat_hi_cutoff = 44,
                                       tbili_hi_cutoff = 34.2,
@@ -47,7 +49,7 @@ apply_all_transformations <- function(sliced_data_list,
                                      lact_hi_cutoff,
                                      plt_lo_cutoff,
                                      plt_lo_hi_ratio)
-    slice_info$data <- qualifying_abx_duration(slice_info$data, window_day_col, aim)
+    slice_info$data <- qualifying_abx_duration(slice_info$data, window_day_col, aim, abx_days)
     slice_info$data <- define_sepsis(slice_info$data)
     return(slice_info)
   }, .options = furrr_options(seed = TRUE))

@@ -8,6 +8,7 @@ define_ase_disch(
   daily_data,
   transferout_id,
   cohort_id = NULL,
+  abx_days = 4,
   creat_hi_lo_ratio = 2,
   creat_hi_cutoff = 44,
   tbili_hi_cutoff = 34.2,
@@ -23,6 +24,8 @@ define_ase_disch(
 \item{transferout_id}{A vector of sequence numbers (\code{seqnum}) indicating patients who were transferred out acutely.}
 
 \item{cohort_id}{A list of two vectors: the first vector contains patient IDs (\code{unique_pt_id}) and the second vector contains sequence numbers (\code{seqnum}) for selecting a sub-cohort (default is NULL).}
+
+\item{abx_days}{An integer specifying the number of consecutive antimicrobial days.}
 
 \item{creat_hi_lo_ratio}{The ratio of high to low creatinine levels to define renal dysfunction (default is 2).}
 

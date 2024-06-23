@@ -5,6 +5,7 @@
 #' @param data A data frame containing patient data with columns `unique_pt_id`, `seqnum`, `day`, `new_abx_start`, `abx_daily`, `death`, `transfer_acute`, and `ALL_DAYS`.
 #' @param window_day_col A string specifying the name of the column indicating the presence of blood culture days within a specified window (default is "window_day").
 #' @param aim An integer specifying the aim criteria: 2 for specific criteria or 3 for extended criteria (default is 2).
+#' @param abx_days An integer specifying the number of consecutive antimicrobial days.
 #' @return A data frame with new columns indicating qualifying antimicrobial treatments and their episodes.
 #' @examples
 #' # Example data frame
@@ -25,7 +26,7 @@
 #' @import future
 #' @import furrr
 #' @export
-qualifying_abx_duration <- function(data, window_day_col="window_day", aim=2) {
+qualifying_abx_duration <- function(data, window_day_col="window_day", aim=2, abx_days=4) {
   data <- data %>%
     arrange(unique_pt_id, seqnum, day) %>%
     group_by(unique_pt_id, seqnum) %>%
@@ -45,10 +46,10 @@ qualifying_abx_duration <- function(data, window_day_col="window_day", aim=2) {
     group_by(unique_pt_id, seqnum)  %>%
     mutate(
       abx_qualifying = ifelse(
-        (aim == 2 & (abx_run_length >= 4 |
+        (aim == 2 & (abx_run_length >= abx_days |
                        (death == 1 & !is.na(death_bcx_day) & abx_run_length >= death_bcx_day & ((lag(abx_daily_new)[length(lag(abx_daily_new))] == 1 & !is.na(lag(abx_daily_new)[length(lag(abx_daily_new))])) | (abx_daily_new == 1 & !is.na(abx_daily_new)))) |
                        (transfer_acute == 1 & !is.na(transfer_acute_bcx_day) & abx_run_length >= transfer_acute_bcx_day & ((lag(abx_daily_new)[length(lag(abx_daily_new))] == 1 & !is.na(lag(abx_daily_new)[length(lag(abx_daily_new))])) | (abx_daily_new == 1 & !is.na(abx_daily_new)))))) |
-          (aim == 3 & (abx_run_length >= 4 |
+          (aim == 3 & (abx_run_length >= abx_days |
                          (death == 1 & !is.na(death_bcx_day) & abx_run_length >= death_bcx_day & ((lag(abx_daily_new)[length(lag(abx_daily_new))] == 1 & !is.na(lag(abx_daily_new)[length(lag(abx_daily_new))])) | (abx_daily_new == 1 & !is.na(abx_daily_new)))) |
                          (transfer_acute == 1 & !is.na(transfer_acute_bcx_day) & abx_run_length >= transfer_acute_bcx_day & ((lag(abx_daily_new)[length(lag(abx_daily_new))] == 1 & !is.na(lag(abx_daily_new)[length(lag(abx_daily_new))])) | (abx_daily_new == 1 & !is.na(abx_daily_new)))) |
                          (day==ALL_DAYS & transfer_acute == 0 & death == 0 & !is.na(disch_bcx_day) & abx_run_length >= disch_bcx_day & (abx_daily_new == 1 & !is.na(abx_daily_new))))),
