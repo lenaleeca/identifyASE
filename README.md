@@ -1,6 +1,12 @@
 # IdentifyASE
 
-IdentifyASE is an R package designed to process daily patient data to define acute sepsis episodes and discharge information. It includes steps for data formatting, selecting sub-cohorts, creating transfer indicators, and applying transformations to identify sepsis.
+IdentifyASE is an R package designed to process daily patient data to identify adult sepsis events (ASE) in hospitalized patients using the CDC's ASE Toolkit. 
+The `define_ase` function sits at the top of the hierarchical structure of the package and is the main function users will interact with. This function initiates the analysis by sequentially executing key functions to check the ASE criteria. 
+The first criterion, presumed infection, is checked by identifying blood culture events through `slice_bcx_data` and qualifying antimicrobial medications through `qualifying_abx_duration`. 
+The second criterion, acute organ dysfunction, is evaluated using `add_aod_daily`. These key functions are supported by helper functions at a lower level, which handle specific data transformations and calculations.
+
+The package contains preset parameters aligning to the ASE toolkit's criteria, such as blood culture window period, lab thresholds for organ dysfunction, and required consecutive days of antimicrobial treatments.  
+Researchers can adjust these parameters, select sub-groups, and indicate patients who were transferred out to an acute hospital to meet their research needs.
 
 ## Installation
 
@@ -43,41 +49,51 @@ Make sure these packages are installed and loaded in your R environment.
 ```r
 install.packages(c("dplyr", "purrr", "future", "furrr", "devtools"))
 ```
+```{r}
+library(dplyr)
+library(purrr)
+library(future)
+library(furrr)
+library(devtools)
+```
 
 ## Usage
 
-Here is an example of how to use the main functions in this package:
+Here is an example of how to identify ASE cases using the main function `define_ase`:
 
 ```{r}
 daily_data <- data.frame(
-  unique_pt_id = c(1, 1, 1, 2, 2, 2),
-  seqnum = c(1, 1, 1, 1, 1, 1),
-  day = c(0, 1, 2, 0, 1, 2),
-  death = c(0, 0, 0, 0, 1, 0),
-  ALL_DAYS = c(3, 3, 3, 3, 3, 3),
-  bcx_daily = c(1, 0, 0, 0, 1, 0),
-  vasop_daily = c(0, 1, 0, 0, 0, 1),
-  imv_daily = c(0, 0, 1, 0, 1, 0),
-  lact_daily_hi = c(1.5, 2.5, 1.8, 1.9, 2.1, 3.0),
-  tbili_daily_hi = c(30, 35, 40, 32, 36, 38),
-  tbili_daily_lo = c(30, 35, 40, 32, 36, 38),
-  tbili_baseline = c(20, 20, 20, 25, 25, 25),
-  creat_daily_hi = c(40, 45, 50, 35, 60, 55),
-  creat_daily_lo = c(40, 45, 50, 35, 60, 55),
-  creat_baseline = c(20, 20, 20, 25, 25, 25),
-  plt_daily_hi = c(150, 80, 90, 110, 70, 50),
-  plt_daily_lo = c(150, 80, 90, 110, 70, 50),
-  plt_baseline = c(200, 200, 200, 180, 180, 180),
-  esrd_icd = c(0, 0, 0, 0, 0, 0),
-  new_abx_start = c(0, 1, 0, 0, 1, 0),
-  abx_daily = c(0, 1, 1, 0, 1, 1)
+  unique_pt_id = c(1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 4, 4),
+  seqnum = c(12602, 12602, 12602, 18613, 18613, 18613, 54928, 54928, 54928, 
+             27201, 27201, 27201, 27201, 27201),
+  day = c(0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2, 3, 4),
+  death = c(0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+  ALL_DAYS = c(3, 3, 3, 3, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5),
+  bcx_daily = c(1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0),
+  vasop_daily = c(0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0),
+  imv_daily = c(0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0),
+  lact_daily_hi = c(1.5, 2.5, 1.8, 1.9, 2.1, 3.0, 1.5, 2.5, 1.8, 
+                    1.5, 1.9, 2.1, 2.1, 3.0),
+  tbili_daily_hi = c(30, 35, 40, 32, 36, 38, 30, 35, 40, 30, 32, 35, 36, 50),
+  tbili_daily_lo = c(30, 35, 40, 32, 36, 38, 30, 35, 40, 30, 32, 35, 36, 50),
+  tbili_baseline = c(20, 20, 20, 25, 25, 25, 20, 20, 20, 25, 25, 25, 25, 25),
+  creat_daily_hi = c(40, 45, 50, 35, 60, 55, 40, 45, 50, 35, 35, 45, 60, 55),
+  creat_daily_lo = c(40, 45, 50, 35, 60, 55, 40, 45, 50, 35, 35, 45, 60, 55),
+  creat_baseline = c(20, 20, 20, 25, 25, 25, 20, 20, 20, 25, 25, 25, 25, 25),
+  plt_daily_hi = c(150, 80, 90, 110, 70, 50, 150, 80, 90, 150, 140, 70, 60, 50),
+  plt_daily_lo = c(150, 80, 90, 110, 70, 50, 150, 80, 90, 150, 140, 70, 60, 50),
+  plt_baseline = c(200, 200, 200, 180, 180, 180, 200, 200, 200, 
+                   180, 180, 180, 180, 180),
+  esrd_icd = c(0, 0, 0, 0, 0, 0,0, 0, 0, 0, 0, 0,0,0),
+  new_abx_start = c(0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0),
+  abx_daily = c(0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1)
 )
 
-transferout_id <- c(1)
-cohort_id <- list(c(1, 2), c(1, 1))
+transferout_id <- c(12602,54928,27201)
 
-# Define Acute Sepsis Episodes and Discharge Information
-result <- define_ase_disch(daily_data = daily_data, transferout_id = transferout_id, cohort_id = cohort_id)
+
+# Idenfify Adult Sepsis Events
+result <- define_ase(daily_data = daily_data, transferout_id = transferout_id)
 print(result)
 ```
 
