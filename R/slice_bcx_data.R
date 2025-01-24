@@ -6,19 +6,19 @@ if(length(new.packages)) install.packages(new.packages)
 lapply(pack, require, character.only = TRUE)
 options(scipen = 999)
 
-#' Slice Data Around Blood Culture Days
+#' Slice Data Around Blood Culture Collections
 #'
-#' This function slices daily data around blood culture days for each patient, creating a list of data frames
-#' containing the specified window of days before and after each blood culture day.
+#' This function slices daily data around blood culture collections for each patient, creating a list of data frames
+#' containing the specified window of days before and after each blood culture collection.
 #'
 #' @param data A data frame containing patient data with columns `unique_pt_id`, `seqnum`, `day`, and `bcx_daily`.
-#' @param slide_day_before An integer specifying the number of days before each blood culture day to include in the slice (default is 2).
-#' @param slide_day_after An integer specifying the number of days after each blood culture day to include in the slice (default is 6).
+#' @param slide_day_before An integer specifying the number of days before each blood culture collection to include in the slice (default is 2, per the ASE toolkit).
+#' @param slide_day_after An integer specifying the number of days after each blood culture collection to include in the slice (default is 6 to track sequential antimicrobial usage if a new antimicrobial starts on the final BCWP day).
 #' @return A list of lists, where each list contains `unique_pt_id`, `seqnum`, and a data frame (`data`) with the sliced data.
 #' @examples
 #' data <- data.frame(
 #'   unique_pt_id = c(1, 1, 1, 2, 2, 2),
-#'   seqnum = c(1, 1, 1, 1, 1, 1),
+#'   seqnum = c(12602, 12602, 12602, 18613, 18613, 18613),
 #'   day = c(1, 2, 3, 1, 2, 3),
 #'   bcx_daily = c(0, 1, 0, 0, 1, 0)
 #' )

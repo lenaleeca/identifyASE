@@ -3,12 +3,12 @@
 #' This function defines sepsis based on the onset of acute organ dysfunction (AOD) and qualifying antimicrobial treatments. It creates indicators for community-acquired and hospital-acquired sepsis.
 #'
 #' @param data A data frame containing patient data with columns `unique_pt_id`, `seqnum`, `day`, `aod_any_daily_comm`, `aod_any_daily_hosp`, `bcx_daily`, `abx_window_startday`, and `abx_qualifying_ep`.
-#' @return A data frame with new columns indicating the onset days for community and hospital sepsis and indicators for sepsis.
+#' @return A data frame with new columns indicating the onset days for community and hospital sepsis and indicators for sepsis onset types.
 #' @examples
 #' # Example data frame
 #' data <- data.frame(
 #'   unique_pt_id = c(1, 1, 1, 2, 2, 2),
-#'   seqnum = c(1, 1, 1, 1, 1, 1),
+#'   seqnum = c(12602, 12602, 12602, 18613, 18613, 18613),
 #'   day = c(1, 2, 3, 1, 2, 3),
 #'   aod_any_daily_comm = c(0, 1, 0, 0, 0, 1),
 #'   aod_any_daily_hosp = c(0, 0, 1, 0, 1, 0),

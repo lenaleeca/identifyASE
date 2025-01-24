@@ -2,28 +2,28 @@
 % Please edit documentation in R/slice_bcx_data.R
 \name{slice_bcx_data}
 \alias{slice_bcx_data}
-\title{Slice Data Around Blood Culture Days}
+\title{Slice Data Around Blood Culture Collections}
 \usage{
 slice_bcx_data(data, slide_day_before = 2, slide_day_after = 6)
 }
 \arguments{
 \item{data}{A data frame containing patient data with columns \code{unique_pt_id}, \code{seqnum}, \code{day}, and \code{bcx_daily}.}
 
-\item{slide_day_before}{An integer specifying the number of days before each blood culture day to include in the slice (default is 2).}
+\item{slide_day_before}{An integer specifying the number of days before each blood culture collection to include in the slice (default is 2, per the ASE toolkit).}
 
-\item{slide_day_after}{An integer specifying the number of days after each blood culture day to include in the slice (default is 6).}
+\item{slide_day_after}{An integer specifying the number of days after each blood culture collection to include in the slice (default is 6 to track sequential antimicrobial usage if a new antimicrobial starts on the final BCWP day).}
 }
 \value{
 A list of lists, where each list contains \code{unique_pt_id}, \code{seqnum}, and a data frame (\code{data}) with the sliced data.
 }
 \description{
-This function slices daily data around blood culture days for each patient, creating a list of data frames
-containing the specified window of days before and after each blood culture day.
+This function slices daily data around blood culture collections for each patient, creating a list of data frames
+containing the specified window of days before and after each blood culture collection.
 }
 \examples{
 data <- data.frame(
   unique_pt_id = c(1, 1, 1, 2, 2, 2),
-  seqnum = c(1, 1, 1, 1, 1, 1),
+  seqnum = c(12602, 12602, 12602, 18613, 18613, 18613),
   day = c(1, 2, 3, 1, 2, 3),
   bcx_daily = c(0, 1, 0, 0, 1, 0)
 )

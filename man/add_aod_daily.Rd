@@ -21,19 +21,19 @@ add_aod_daily(
 
 \item{window_day_col}{A string specifying the name of the column indicating the presence of blood culture days within a specified window.}
 
-\item{creat_hi_lo_ratio}{The ratio of high to low creatinine levels to define renal dysfunction (default is 2).}
+\item{creat_hi_lo_ratio}{The ratio of high to low creatinine levels to define renal dysfunction (default is 2, per the ASE toolkit).}
 
-\item{creat_hi_cutoff}{The cutoff value for high creatinine levels (default is 44).}
+\item{creat_hi_cutoff}{The cutoff value for high creatinine levels (default is 44 µmol/L, per the Risk, Injury, Failure, Loss, and End-stage (RIFLE) renal disease classification system guidelines).}
 
-\item{tbili_hi_cutoff}{The cutoff value for high bilirubin levels (default is 34.2).}
+\item{tbili_hi_cutoff}{The cutoff value for high bilirubin levels (default is 34.2 µmol/L, per the ASE toolkit).}
 
-\item{tbili_hi_lo_ratio}{The ratio of high to low bilirubin levels to define liver dysfunction (default is 2).}
+\item{tbili_hi_lo_ratio}{The ratio of high to low bilirubin levels to define liver dysfunction (default is 2, per the ASE toolkit).}
 
-\item{lact_hi_cutoff}{The cutoff value for high lactate levels (default is 2).}
+\item{lact_hi_cutoff}{The cutoff value for high lactate levels (default is 2 mmol/L, per the ASE toolkit).}
 
-\item{plt_lo_cutoff}{The cutoff value for low platelet counts (default is 100).}
+\item{plt_lo_cutoff}{The cutoff value for low platelet counts (default is 100 10^9/L, per the ASE toolkit).}
 
-\item{plt_lo_hi_ratio}{The ratio of low to high platelet counts to define hematologic dysfunction (default is 0.5).}
+\item{plt_lo_hi_ratio}{The ratio of low to high platelet counts to define hematologic dysfunction (default is 0.5, per the ASE toolkit).}
 }
 \value{
 A data frame with new columns for each type of AOD and additional calculations based on the specified window.
@@ -46,7 +46,7 @@ based on given criteria for cardiovascular, respiratory, lactate, liver, renal, 
 # Example data frame
 data <- data.frame(
   unique_pt_id = c(1, 1, 1, 2, 2, 2),
-  seqnum = c(1, 1, 1, 1, 1, 1),
+  seqnum = c(12602, 12602, 12602, 18613, 18613, 18613),
   day = c(1, 2, 3, 1, 2, 3),
   vasop_daily = c(0, 1, 0, 0, 1, 0),
   imv_daily = c(0, 0, 1, 1, 0, 1),

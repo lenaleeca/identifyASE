@@ -2,12 +2,12 @@
 % Please edit documentation in R/qualifying_abx_duration.R
 \name{qualifying_abx_duration}
 \alias{qualifying_abx_duration}
-\title{Capture Qualifying Antimicrobials}
+\title{Capture Qualifying Antimicrobial Treatments}
 \usage{
 qualifying_abx_duration(
   data,
   window_day_col = "window_day",
-  aim = 2,
+  aim = 1,
   abx_days = 4
 )
 }
@@ -16,12 +16,16 @@ qualifying_abx_duration(
 
 \item{window_day_col}{A string specifying the name of the column indicating the presence of blood culture days within a specified window (default is "window_day").}
 
-\item{aim}{An integer specifying the aim criteria: 2 for specific criteria or 3 for extended criteria (default is 2).}
+\item{aim}{An integer specifying the aim criteria (default is 1):
+\itemize{
+\item \strong{1}: Original definition from the ASE Toolkit, considering qualifying antimicrobial treatment (\code{abx_qualifying}) in the event of death or transfer. The presumed infection criteria can still be met if fewer than 4 QADs, given that new antimicrobial treatment continues until the day of or a day prior to death or transfer.
+\item \strong{2}: Extended criteria, which includes discharge events in addition to death or transfer. The presumed infection criteria can still be met if fewer than 4 QADs, given that new antimicrobial treatment continues until the day of or a day prior to discharge.
+}}
 
-\item{abx_days}{An integer specifying the number of consecutive antimicrobial days.}
+\item{abx_days}{An integer specifying the required number of consecutive antimicrobial days (default is 4 in the absence of death, transfer or discharge, per the ASE toolkit).}
 }
 \value{
-A data frame with new columns indicating qualifying antimicrobial treatments and their episodes.
+A data frame with new columns indicating qualifying antimicrobial treatments.
 }
 \description{
 This function identifies qualifying antimicrobial treatments based on specified criteria during a window period around blood culture days.
@@ -30,7 +34,7 @@ This function identifies qualifying antimicrobial treatments based on specified 
 # Example data frame
 data <- data.frame(
   unique_pt_id = c(1, 1, 1, 2, 2, 2),
-  seqnum = c(1, 1, 1, 1, 1, 1),
+  seqnum = c(12602, 12602, 12602, 18613, 18613, 18613),
   day = c(1, 2, 3, 1, 2, 3),
   new_abx_start = c(0, 1, 0, 0, 1, 0),
   abx_daily = c(0, 1, 1, 0, 1, 1),
@@ -39,5 +43,5 @@ data <- data.frame(
   ALL_DAYS = c(3, 3, 3, 3, 3, 3),
   window_day = c(1, 1, 0, 1, 1, 0)
 )
-qualifying_abx_duration(data, "window_day", 2)
+qualifying_abx_duration(data, "window_day", 1)
 }

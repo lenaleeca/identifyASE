@@ -2,12 +2,13 @@
 % Please edit documentation in R/define_ase.R
 \name{define_ase}
 \alias{define_ase}
-\title{Define Acute Sepsis Episodes}
+\title{Define Adult Sepsis Events}
 \usage{
 define_ase(
   daily_data,
   transferout_id,
   cohort_id = NULL,
+  window = 2,
   abx_days = 4,
   creat_hi_lo_ratio = 2,
   creat_hi_cutoff = 44,
@@ -21,54 +22,59 @@ define_ase(
 \arguments{
 \item{daily_data}{A data frame containing daily patient data with columns \code{unique_pt_id}, \code{seqnum}, \code{day}, \code{death}, \code{ALL_DAYS}, and other clinical variables.}
 
-\item{transferout_id}{A vector of sequence numbers (\code{seqnum}) indicating patients who were transferred out acutely.}
+\item{transferout_id}{A vector of sequence numbers (\code{seqnum}) indicating patients who were transferred out to an acute hospital (default is NULL).}
 
-\item{cohort_id}{A list of two vectors: the first vector contains patient IDs (\code{unique_pt_id}) and the second vector contains sequence numbers (\code{seqnum}) for selecting a sub-cohort (default is NULL).}
+\item{cohort_id}{A list of two vectors: the first vector contains patient IDs (\code{unique_pt_id}) and the second vector contains sequence numbers (\code{seqnum}) for selecting a sub-group (default is NULL).}
 
-\item{abx_days}{An integer specifying the number of consecutive antimicrobial days.}
+\item{window}{An integer specifying the number of calendar days on either side of the date of blood culture collection ie. blood culture window period. Must be an integer between 1 and 4 (default is 2, per the ASE toolkit).}
 
-\item{creat_hi_lo_ratio}{The ratio of high to low creatinine levels to define renal dysfunction (default is 2).}
+\item{abx_days}{An integer specifying the required number of consecutive antimicrobial days (default is 4 in the absence of death, transfer or discharge, per the ASE toolkit).}
 
-\item{creat_hi_cutoff}{The cutoff value for high creatinine levels (default is 44).}
+\item{creat_hi_lo_ratio}{The ratio of high to low creatinine levels to define renal dysfunction (default is 2, per the ASE toolkit).}
 
-\item{tbili_hi_cutoff}{The cutoff value for high bilirubin levels (default is 34.2).}
+\item{creat_hi_cutoff}{The cutoff value for high creatinine levels (default is 44 µmol/L, per the Risk, Injury, Failure, Loss, and End-stage (RIFLE) renal disease classification system guidelines).}
 
-\item{tbili_hi_lo_ratio}{The ratio of high to low bilirubin levels to define liver dysfunction (default is 2).}
+\item{tbili_hi_cutoff}{The cutoff value for high bilirubin levels (default is 34.2 µmol/L, per the ASE toolkit).}
 
-\item{lact_hi_cutoff}{The cutoff value for high lactate levels (default is 2).}
+\item{tbili_hi_lo_ratio}{The ratio of high to low bilirubin levels to define liver dysfunction (default is 2, per the ASE toolkit).}
 
-\item{plt_lo_cutoff}{The cutoff value for low platelet counts (default is 100).}
+\item{lact_hi_cutoff}{The cutoff value for high lactate levels (default is 2 mmol/L, per the ASE toolkit).}
 
-\item{plt_lo_hi_ratio}{The ratio of low to high platelet counts to define hematologic dysfunction (default is 0.5).}
+\item{plt_lo_cutoff}{The cutoff value for low platelet counts (default is 100 10^9/L, per the ASE toolkit).}
+
+\item{plt_lo_hi_ratio}{The ratio of low to high platelet counts to define hematologic dysfunction (default is 0.5, per the ASE toolkit).}
 }
 \value{
-A list containing sepsis episode IDs, final combined data for 2-day and 3-day windows, and the respective data frames.
+A list of sequence numbers of ASE cases categorized by onset type and a data frame containing the data surrounding the blood culture events in the specified window, with additional variables such as indicators for qualifying antimicrobial treatments, the presence of various types of acute organ dysfunctions, and indicators for sepsis onset types.
 }
 \description{
-This function processes daily patient data to define acute sepsis episodes, taking into account cohort selection and acute transfer out indicators. It also applies window transformations and slices data around blood culture days.
+This function processes daily patient data, slices data around blood culture days, and sequentially evaluates the ASE toolkit criteria to define adult sepsis events. It allows subgroups selection and acute transfer out indication.
 }
 \examples{
 # Example daily data frame
 daily_data <- data.frame(
-  unique_pt_id = c(1, 1, 1, 2, 2, 2),
-  seqnum = c(1, 1, 1, 1, 1, 1),
-  day = c(0, 1, 2, 0, 1, 2),
-  death = c(0, 0, 0, 0, 1, 0),
-  ALL_DAYS = c(3, 3, 3, 3, 3, 3),
-  bcx_daily = c(1, 0, 0, 0, 1, 0),
-  vasop_daily = c(0, 1, 0, 0, 0, 1),
-  imv_daily = c(0, 0, 1, 0, 1, 0),
-  lact_daily_hi = c(1.5, 2.5, 1.8, 1.9, 2.1, 3.0),
-  tbili_daily_hi = c(30, 35, 40, 32, 36, 38),
-  tbili_baseline = c(20, 20, 20, 25, 25, 25),
-  creat_daily_hi = c(40, 45, 50, 35, 60, 55),
-  creat_baseline = c(20, 20, 20, 25, 25, 25),
-  plt_daily_lo = c(150, 80, 90, 110, 70, 50),
-  plt_baseline = c(200, 200, 200, 180, 180, 180),
-  esrd_icd = c(0, 0, 0, 0, 0, 0),
-  new_abx_start = c(0, 1, 0, 0, 1, 0),
-  abx_daily = c(0, 1, 1, 0, 1, 1)
+  unique_pt_id = c(1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 4, 4),
+  seqnum = c(12602, 12602, 12602, 18613, 18613, 18613, 54928, 54928, 54928, 27201, 27201, 27201, 27201, 27201),
+  day = c(0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2, 3, 4),
+  death = c(0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+  ALL_DAYS = c(3, 3, 3, 3, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5),
+  bcx_daily = c(1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0),
+  vasop_daily = c(0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0),
+  imv_daily = c(0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1,0, 0),
+  lact_daily_hi = c(1.5, 2.5, 1.8, 1.9, 2.1, 3.0, 1.5, 2.5, 1.8, 1.5, 1.9, 2.1, 2.1, 3.0),
+  tbili_daily_hi = c(30, 35, 40, 32, 36, 38, 30, 35, 40, 30, 32, 35, 36, 50),
+  tbili_daily_lo = c(30, 35, 40, 32, 36, 38, 30, 35, 40, 30, 32, 35, 36, 50),
+  tbili_baseline = c(20, 20, 20, 25, 25, 25, 20, 20, 20, 25, 25, 25, 25, 25),
+  creat_daily_hi = c(40, 45, 50, 35, 60, 55, 40, 45, 50, 35, 35, 45, 60, 55),
+  creat_daily_lo = c(40, 45, 50, 35, 60, 55, 40, 45, 50, 35, 35, 45, 60, 55),
+  creat_baseline = c(20, 20, 20, 25, 25, 25, 20, 20, 20, 25, 25, 25, 25, 25),
+  plt_daily_hi = c(150, 80, 90, 110, 70, 50, 150, 80, 90, 150, 140, 70, 60, 50),
+  plt_daily_lo = c(150, 80, 90, 110, 70, 50, 150, 80, 90, 150, 140, 70, 60, 50),
+  plt_baseline = c(200, 200, 200, 180, 180, 180, 200, 200, 200, 180, 180, 180, 180, 180),
+  esrd_icd = c(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+  new_abx_start = c(0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0),
+  abx_daily = c(0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1)
 )
-transferout_id <- c(1)
+transferout_id <- c(12602,54928,27201)
 define_ase(daily_data, transferout_id)
 }

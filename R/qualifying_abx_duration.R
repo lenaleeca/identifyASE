@@ -1,17 +1,19 @@
-#' Capture Qualifying Antimicrobials
+#' Capture Qualifying Antimicrobial Treatments
 #'
 #' This function identifies qualifying antimicrobial treatments based on specified criteria during a window period around blood culture days.
 #'
 #' @param data A data frame containing patient data with columns `unique_pt_id`, `seqnum`, `day`, `new_abx_start`, `abx_daily`, `death`, `transfer_acute`, and `ALL_DAYS`.
 #' @param window_day_col A string specifying the name of the column indicating the presence of blood culture days within a specified window (default is "window_day").
-#' @param aim An integer specifying the aim criteria: 2 for specific criteria or 3 for extended criteria (default is 2).
-#' @param abx_days An integer specifying the number of consecutive antimicrobial days.
-#' @return A data frame with new columns indicating qualifying antimicrobial treatments and their episodes.
+#' @param aim An integer specifying the aim criteria (default is 1):
+#'   - **1**: Original definition from the ASE Toolkit, considering qualifying antimicrobial treatment (`abx_qualifying`) in the event of death or transfer. The presumed infection criteria can still be met if fewer than 4 QADs, given that new antimicrobial treatment continues until the day of or a day prior to death or transfer.
+#'   - **2**: Extended criteria, which includes discharge events in addition to death or transfer. The presumed infection criteria can still be met if fewer than 4 QADs, given that new antimicrobial treatment continues until the day of or a day prior to discharge.
+#' @param abx_days An integer specifying the required number of consecutive antimicrobial days (default is 4 in the absence of death, transfer or discharge, per the ASE toolkit).
+#' @return A data frame with new columns indicating qualifying antimicrobial treatments.
 #' @examples
 #' # Example data frame
 #' data <- data.frame(
 #'   unique_pt_id = c(1, 1, 1, 2, 2, 2),
-#'   seqnum = c(1, 1, 1, 1, 1, 1),
+#'   seqnum = c(12602, 12602, 12602, 18613, 18613, 18613),
 #'   day = c(1, 2, 3, 1, 2, 3),
 #'   new_abx_start = c(0, 1, 0, 0, 1, 0),
 #'   abx_daily = c(0, 1, 1, 0, 1, 1),
@@ -20,13 +22,13 @@
 #'   ALL_DAYS = c(3, 3, 3, 3, 3, 3),
 #'   window_day = c(1, 1, 0, 1, 1, 0)
 #' )
-#' qualifying_abx_duration(data, "window_day", 2)
+#' qualifying_abx_duration(data, "window_day", 1)
 #' @import dplyr
 #' @import purrr
 #' @import future
 #' @import furrr
 #' @export
-qualifying_abx_duration <- function(data, window_day_col="window_day", aim=2, abx_days=4) {
+qualifying_abx_duration <- function(data, window_day_col="window_day", aim=1, abx_days=4) {
   data <- data %>%
     arrange(unique_pt_id, seqnum, day) %>%
     group_by(unique_pt_id, seqnum) %>%
@@ -46,10 +48,10 @@ qualifying_abx_duration <- function(data, window_day_col="window_day", aim=2, ab
     group_by(unique_pt_id, seqnum)  %>%
     mutate(
       abx_qualifying = ifelse(
-        (aim == 2 & (abx_run_length >= abx_days |
+        (aim == 1 & (abx_run_length >= abx_days |
                        (death == 1 & !is.na(death_bcx_day) & abx_run_length >= death_bcx_day & ((lag(abx_daily_new)[length(lag(abx_daily_new))] == 1 & !is.na(lag(abx_daily_new)[length(lag(abx_daily_new))])) | (abx_daily_new == 1 & !is.na(abx_daily_new)))) |
                        (transfer_acute == 1 & !is.na(transfer_acute_bcx_day) & abx_run_length >= transfer_acute_bcx_day & ((lag(abx_daily_new)[length(lag(abx_daily_new))] == 1 & !is.na(lag(abx_daily_new)[length(lag(abx_daily_new))])) | (abx_daily_new == 1 & !is.na(abx_daily_new)))))) |
-          (aim == 3 & (abx_run_length >= abx_days |
+          (aim == 2 & (abx_run_length >= abx_days |
                          (death == 1 & !is.na(death_bcx_day) & abx_run_length >= death_bcx_day & ((lag(abx_daily_new)[length(lag(abx_daily_new))] == 1 & !is.na(lag(abx_daily_new)[length(lag(abx_daily_new))])) | (abx_daily_new == 1 & !is.na(abx_daily_new)))) |
                          (transfer_acute == 1 & !is.na(transfer_acute_bcx_day) & abx_run_length >= transfer_acute_bcx_day & ((lag(abx_daily_new)[length(lag(abx_daily_new))] == 1 & !is.na(lag(abx_daily_new)[length(lag(abx_daily_new))])) | (abx_daily_new == 1 & !is.na(abx_daily_new)))) |
                          (day==ALL_DAYS & transfer_acute == 0 & death == 0 & !is.na(disch_bcx_day) & abx_run_length >= disch_bcx_day & (abx_daily_new == 1 & !is.na(abx_daily_new))))),
@@ -57,6 +59,6 @@ qualifying_abx_duration <- function(data, window_day_col="window_day", aim=2, ab
       abx_qualifying_ep = ifelse(any(abx_qualifying == 1), 1, 0)
     ) %>%
     ungroup()
-
+  
   return(data)
 }
