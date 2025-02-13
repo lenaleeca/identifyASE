@@ -99,16 +99,16 @@ result <- define_ase(daily_data = daily_data, transferout_id = transferout_id)
 
 **Ambiguities and Challenges in Translating Clinical Criteria into Code: Insights from Coding the Adult Sepsis Event Toolkit**  
 
-Na Li\textsuperscript{1,2,3}, April Nguyen\textsuperscript{2}, Rachel Nguyen\textsuperscript{2}, Kednapa Thavorn\textsuperscript{5,6}, Jennifer Ziegler\textsuperscript{7}, Peter Dodek\textsuperscript{8}, Allan Garland\textsuperscript{6}  
+Na Li<sup>1,2,3</sup>, April Nguyen<sup>2</sup>, Rachel Nguyen<sup>2</sup>, Kednapa Thavorn<sup>5,6</sup>, Jennifer Ziegler<sup>7</sup>, Peter Dodek<sup>8</sup>, Allan Garland<sup>6</sup>  
 
-\textsuperscript{1} Department of Community Health Sciences, Cumming School of Medicine, University of Calgary, Calgary, Alberta, Canada  
-\textsuperscript{2} Centre for Health Informatics, University of Calgary, Alberta, Canada  
-\textsuperscript{3} Department of Computing and Software and Department of Medicine, McMaster University, Hamilton, Ontario, Canada  
-\textsuperscript{4} Department of Medicine, University of Michigan, Ann Arbor, MI, USA  
-\textsuperscript{5} Ottawa Hospital Research Institute, Ottawa, Ontario, Canada  
-\textsuperscript{6} School of Epidemiology and Public Health, University of Ottawa, Ottawa, Ontario, Canada  
-\textsuperscript{7} Departments of Medicine and Community Health Sciences, University of Manitoba, Winnipeg, Manitoba, Canada  
-\textsuperscript{8} Division of Critical Care Medicine and Center for Advancing Health Outcomes, St. Paul's Hospital and University of British Columbia, Vancouver, BC, Canada  
+<sup>1</sup> Department of Community Health Sciences, Cumming School of Medicine, University of Calgary, Calgary, Alberta, Canada  
+<sup>2</sup> Centre for Health Informatics, University of Calgary, Alberta, Canada  
+<sup>3</sup> Department of Computing and Software and Department of Medicine, McMaster University, Hamilton, Ontario, Canada  
+<sup>4</sup> Department of Medicine, University of Michigan, Ann Arbor, MI, USA  
+<sup>5</sup> Ottawa Hospital Research Institute, Ottawa, Ontario, Canada  
+<sup>6</sup> School of Epidemiology and Public Health, University of Ottawa, Ottawa, Ontario, Canada  
+<sup>7</sup> Departments of Medicine and Community Health Sciences, University of Manitoba, Winnipeg, Manitoba, Canada  
+<sup>8</sup> Division of Critical Care Medicine and Center for Advancing Health Outcomes, St. Paul's Hospital and University of British Columbia, Vancouver, BC, Canada
 
 ## License
 
