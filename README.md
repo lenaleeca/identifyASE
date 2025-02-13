@@ -10,9 +10,11 @@ Researchers can adjust these parameters, select sub-groups, and indicate patient
 
 ## Installation
 
-To install the IdentifyASE package from GitHub, you need to use the `devtools` package. Make sure you have a personal access token if the repository is private.
+To install the IdentifyASE package from GitHub, you need to use the `devtools` package. 
 
 ### Step-by-Step Installation
+
+If the repo is private: 
 
 1. **Install and load `devtools`**
 
@@ -34,6 +36,27 @@ To install the IdentifyASE package from GitHub, you need to use the `devtools` p
     library(identifyASE)
     ```
 
+If the repo is public:
+
+1. **Install and load `devtools`**
+
+    ```r
+    install.packages("devtools")
+    library(devtools)
+    ```
+
+2. **Install the package from GitHub**
+
+    ```r
+    install_github("lenaleeca/identifyASE")
+    ```
+
+3. **Load the package**
+
+    ```r
+    library(identifyASE)
+    ```
+    
 ## Dependencies
 
 This package depends on the following R packages:
