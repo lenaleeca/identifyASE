@@ -120,7 +120,7 @@ result <- define_ase(daily_data = daily_data, transferout_id = transferout_id)
 ```
 ## Citation
 
-Li N, Nguyen A, Nguyen R, Thavorn K, Ziegler J, Dodek P, Garland A. **Ambiguities and Challenges in Translating Clinical Criteria into Code: Insights from Coding the Adult Sepsis Event Toolkit**. 2025. Submitted.  
+Li N, Nguyen A, Nguyen R, Thavorn K, Ziegler J, Dodek P, Garland A. *Ambiguities and Challenges in Translating Clinical Criteria into Code: Insights from Coding the Adult Sepsis Event Toolkit*. 2025. Submitted.  
 
 ## License
 
