@@ -118,6 +118,7 @@ transferout_id <- c(12602,54928,27201)
 # Idenfify Adult Sepsis Events
 result <- define_ase(daily_data = daily_data, transferout_id = transferout_id)
 ```
+<<<<<<< HEAD
 For more detailed information on preparing input data and other package usage, please refer to the vignette.
 
 ## Citation
