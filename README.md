@@ -119,7 +119,19 @@ transferout_id <- c(12602,54928,27201)
 result <- define_ase(daily_data = daily_data, transferout_id = transferout_id)
 ```
 
-For more detailed information on preparing input data and other package usage, please refer to the vignette.
+For more detailed information on preparing input data and other package usage, please refer to the [vignette](https://github.com/lenaleeca/identifyASE/blob/main/inst/doc/vignette_ase.html).
+
+Also, you can view the vignette locally after installing the package by running:
+
+```r
+vignette("vignette_ase")
+```
+
+or 
+
+```r
+browseVignettes("identifyASE")
+```
 
 ## Citation
 
