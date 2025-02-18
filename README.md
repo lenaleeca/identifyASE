@@ -118,20 +118,23 @@ transferout_id <- c(12602,54928,27201)
 # Idenfify Adult Sepsis Events
 result <- define_ase(daily_data = daily_data, transferout_id = transferout_id)
 ```
-## Authorship
+For more detailed information on preparing input data and other package usage, please refer to the vignette.
 
-**Ambiguities and Challenges in Translating Clinical Criteria into Code: Insights from Coding the Adult Sepsis Event Toolkit**  
+## Citation
 
-Na Li<sup>1,2,3</sup>, April Nguyen<sup>2</sup>, Rachel Nguyen<sup>2</sup>, Kednapa Thavorn<sup>5,6</sup>, Jennifer Ziegler<sup>7</sup>, Peter Dodek<sup>8</sup>, Allan Garland<sup>6</sup>  
+If you find IdentifyASE useful for your research or development, please cite the following source:
 
-<sup>1</sup> Department of Community Health Sciences, Cumming School of Medicine, University of Calgary, Calgary, Alberta, Canada  
-<sup>2</sup> Centre for Health Informatics, University of Calgary, Alberta, Canada  
-<sup>3</sup> Department of Computing and Software and Department of Medicine, McMaster University, Hamilton, Ontario, Canada  
-<sup>4</sup> Department of Medicine, University of Michigan, Ann Arbor, MI, USA  
-<sup>5</sup> Ottawa Hospital Research Institute, Ottawa, Ontario, Canada  
-<sup>6</sup> School of Epidemiology and Public Health, University of Ottawa, Ottawa, Ontario, Canada  
-<sup>7</sup> Departments of Medicine and Community Health Sciences, University of Manitoba, Winnipeg, Manitoba, Canada  
-<sup>8</sup> Division of Critical Care Medicine and Center for Advancing Health Outcomes, St. Paul's Hospital and University of British Columbia, Vancouver, BC, Canada
+```bibtex
+@article{identifyASE,
+  title = {Ambiguities and Challenges in Translating Clinical Criteria into Code: Insights from Coding the Adult Sepsis Event Toolkit},
+  author = {Li, Na and Nguyen, April and Nguyen, Rachel and Thavorn, Kednapa and Ziegler, Jennifer and Dodek, Peter and Garland, Allan},
+  journal = {TBD},  
+  year = {2025},
+  volume = {TBD},   
+  number = {TBD},   
+  pages = {TBD}   
+}
+```
 
 ## License
 

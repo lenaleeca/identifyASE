@@ -130,6 +130,22 @@ The input data for this package consists of a dataset containing daily patient-l
 | `new_abx_start`   | Binary: 1 = any qualifying antimicrobial was first given on that calendar day.  | Can be found from medication data and calculation/programming is required. Refer to the CDC Adult Sepsis Event (ASE) Toolkit, page 14 for specific antimicrobial names.					 |
 | `abx_daily`       | Binary: 1 = received any qualifying antimicrobial on that calendar day. | Can be found from medication data and calculation/programming is required. Refer to the CDC Adult Sepsis Event (ASE) Toolkit, page 14 for specific antimicrobial names.					 |
 
+### Handling Large Integer Variables 
+
+In some datasets, variables like `seqnum` or `unique_pt_id` may be stored as **integer64** instead of standard integer or numeric types. This can occur in the following situations:
+
+- **Large Integers**: When your data includes integer values exceeding the 32-bit integer limit (`2^31 - 1`), such as large IDs or timestamps.  
+- **Memory Efficiency**: When you need to efficiently store and manipulate large vectors of integer data without converting them to double precision, which can lose exact integer representation.
+- **Interfacing with external data**: When importing data from sources or systems (like databases) that use 64-bit integers, ensuring data integrity when importing/exporting values.
+
+In such cases, please install and load the `bit64` package before running the define_ase function. 
+
+```{r, eval = FALSE}
+install.packages("bit64")
+library(bit64)
+```
+
+
 ## Key Functions 
 
 ### `slice_bcx_data`
