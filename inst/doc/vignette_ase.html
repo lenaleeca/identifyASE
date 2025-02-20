@@ -12,7 +12,7 @@
 
 <meta name="author" content="Dr. Na Li" />
 
-<meta name="date" content="2025-02-18" />
+<meta name="date" content="2025-02-20" />
 
 <title>Identify Adult Sepsis Events</title>
 
@@ -340,7 +340,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Identify Adult Sepsis Events</h1>
 <h4 class="author">Dr. Na Li</h4>
-<h4 class="date">2025-02-18</h4>
+<h4 class="date">2025-02-20</h4>
 
 
 
@@ -750,57 +750,35 @@ dysfunction (default is 0.5, per the ASE toolkit).</td>
 </div>
 <div id="example" class="section level2">
 <h2>Example</h2>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># Input data</span></span>
-<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>daily_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>  <span class="at">unique_pt_id =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">4</span>),</span>
-<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>  <span class="at">seqnum =</span> <span class="fu">c</span>(<span class="dv">12602</span>, <span class="dv">12602</span>, <span class="dv">12602</span>, <span class="dv">18613</span>, <span class="dv">18613</span>, <span class="dv">18613</span>, <span class="dv">54928</span>, <span class="dv">54928</span>, <span class="dv">54928</span>, </span>
-<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>             <span class="dv">27201</span>, <span class="dv">27201</span>, <span class="dv">27201</span>, <span class="dv">27201</span>, <span class="dv">27201</span>),</span>
-<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>  <span class="at">day =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>),</span>
-<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>  <span class="at">death =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>),</span>
-<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>  <span class="at">ALL_DAYS =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>),</span>
-<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>  <span class="at">bcx_daily =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>),</span>
-<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a>  <span class="at">vasop_daily =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>),</span>
-<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a>  <span class="at">imv_daily =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>),</span>
-<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a>  <span class="at">lact_daily_hi =</span> <span class="fu">c</span>(<span class="fl">1.5</span>, <span class="fl">2.5</span>, <span class="fl">1.8</span>, <span class="fl">1.9</span>, <span class="fl">2.1</span>, <span class="fl">3.0</span>, <span class="fl">1.5</span>, <span class="fl">2.5</span>, <span class="fl">1.8</span>, </span>
-<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a>                    <span class="fl">1.5</span>, <span class="fl">1.9</span>, <span class="fl">2.1</span>, <span class="fl">2.1</span>, <span class="fl">3.0</span>),</span>
-<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a>  <span class="at">tbili_daily_hi =</span> <span class="fu">c</span>(<span class="dv">30</span>, <span class="dv">35</span>, <span class="dv">40</span>, <span class="dv">32</span>, <span class="dv">36</span>, <span class="dv">38</span>, <span class="dv">30</span>, <span class="dv">35</span>, <span class="dv">40</span>, <span class="dv">30</span>, <span class="dv">32</span>, <span class="dv">35</span>, <span class="dv">36</span>, <span class="dv">50</span>),</span>
-<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a>  <span class="at">tbili_daily_lo =</span> <span class="fu">c</span>(<span class="dv">30</span>, <span class="dv">35</span>, <span class="dv">40</span>, <span class="dv">32</span>, <span class="dv">36</span>, <span class="dv">38</span>, <span class="dv">30</span>, <span class="dv">35</span>, <span class="dv">40</span>, <span class="dv">30</span>, <span class="dv">32</span>, <span class="dv">35</span>, <span class="dv">36</span>, <span class="dv">50</span>),</span>
-<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a>  <span class="at">tbili_baseline =</span> <span class="fu">c</span>(<span class="dv">20</span>, <span class="dv">20</span>, <span class="dv">20</span>, <span class="dv">25</span>, <span class="dv">25</span>, <span class="dv">25</span>, <span class="dv">20</span>, <span class="dv">20</span>, <span class="dv">20</span>, <span class="dv">25</span>, <span class="dv">25</span>, <span class="dv">25</span>, <span class="dv">25</span>, <span class="dv">25</span>),</span>
-<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a>  <span class="at">creat_daily_hi =</span> <span class="fu">c</span>(<span class="dv">40</span>, <span class="dv">45</span>, <span class="dv">50</span>, <span class="dv">35</span>, <span class="dv">60</span>, <span class="dv">55</span>, <span class="dv">40</span>, <span class="dv">45</span>, <span class="dv">50</span>, <span class="dv">35</span>, <span class="dv">35</span>, <span class="dv">45</span>, <span class="dv">60</span>, <span class="dv">55</span>),</span>
-<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a>  <span class="at">creat_daily_lo =</span> <span class="fu">c</span>(<span class="dv">40</span>, <span class="dv">45</span>, <span class="dv">50</span>, <span class="dv">35</span>, <span class="dv">60</span>, <span class="dv">55</span>, <span class="dv">40</span>, <span class="dv">45</span>, <span class="dv">50</span>, <span class="dv">35</span>, <span class="dv">35</span>, <span class="dv">45</span>, <span class="dv">60</span>, <span class="dv">55</span>),</span>
-<span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a>  <span class="at">creat_baseline =</span> <span class="fu">c</span>(<span class="dv">20</span>, <span class="dv">20</span>, <span class="dv">20</span>, <span class="dv">25</span>, <span class="dv">25</span>, <span class="dv">25</span>, <span class="dv">20</span>, <span class="dv">20</span>, <span class="dv">20</span>, <span class="dv">25</span>, <span class="dv">25</span>, <span class="dv">25</span>, <span class="dv">25</span>, <span class="dv">25</span>),</span>
-<span id="cb7-20"><a href="#cb7-20" tabindex="-1"></a>  <span class="at">plt_daily_hi =</span> <span class="fu">c</span>(<span class="dv">150</span>, <span class="dv">80</span>, <span class="dv">90</span>, <span class="dv">110</span>, <span class="dv">70</span>, <span class="dv">50</span>, <span class="dv">150</span>, <span class="dv">80</span>, <span class="dv">90</span>, <span class="dv">150</span>, <span class="dv">140</span>, <span class="dv">70</span>, <span class="dv">60</span>, <span class="dv">50</span>),</span>
-<span id="cb7-21"><a href="#cb7-21" tabindex="-1"></a>  <span class="at">plt_daily_lo =</span> <span class="fu">c</span>(<span class="dv">150</span>, <span class="dv">80</span>, <span class="dv">90</span>, <span class="dv">110</span>, <span class="dv">70</span>, <span class="dv">50</span>, <span class="dv">150</span>, <span class="dv">80</span>, <span class="dv">90</span>, <span class="dv">150</span>, <span class="dv">140</span>, <span class="dv">70</span>, <span class="dv">60</span>, <span class="dv">50</span>),</span>
-<span id="cb7-22"><a href="#cb7-22" tabindex="-1"></a>  <span class="at">plt_baseline =</span> <span class="fu">c</span>(<span class="dv">200</span>, <span class="dv">200</span>, <span class="dv">200</span>, <span class="dv">180</span>, <span class="dv">180</span>, <span class="dv">180</span>, <span class="dv">200</span>, <span class="dv">200</span>, <span class="dv">200</span>, </span>
-<span id="cb7-23"><a href="#cb7-23" tabindex="-1"></a>                   <span class="dv">180</span>, <span class="dv">180</span>, <span class="dv">180</span>, <span class="dv">180</span>, <span class="dv">180</span>),</span>
-<span id="cb7-24"><a href="#cb7-24" tabindex="-1"></a>  <span class="at">esrd_icd =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>,<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>),</span>
-<span id="cb7-25"><a href="#cb7-25" tabindex="-1"></a>  <span class="at">new_abx_start =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>),</span>
-<span id="cb7-26"><a href="#cb7-26" tabindex="-1"></a>  <span class="at">abx_daily =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>)</span>
-<span id="cb7-27"><a href="#cb7-27" tabindex="-1"></a>)</span>
-<span id="cb7-28"><a href="#cb7-28" tabindex="-1"></a></span>
-<span id="cb7-29"><a href="#cb7-29" tabindex="-1"></a><span class="co"># Use `transferout_id` to indicate `seqnum` of patients who were transferred </span></span>
-<span id="cb7-30"><a href="#cb7-30" tabindex="-1"></a><span class="co"># out to an acute hospital</span></span>
-<span id="cb7-31"><a href="#cb7-31" tabindex="-1"></a>transferout_id <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">12602</span>,<span class="dv">54928</span>,<span class="dv">27201</span>)</span>
-<span id="cb7-32"><a href="#cb7-32" tabindex="-1"></a></span>
-<span id="cb7-33"><a href="#cb7-33" tabindex="-1"></a><span class="co"># Use `cohort_id` to select a subgroup by including 2 vectors: </span></span>
-<span id="cb7-34"><a href="#cb7-34" tabindex="-1"></a><span class="co"># The first vector contains patient IDs (`unique_pt_id`)  </span></span>
-<span id="cb7-35"><a href="#cb7-35" tabindex="-1"></a><span class="co"># The second vector contains sequence numbers (`seqnum`)</span></span>
-<span id="cb7-36"><a href="#cb7-36" tabindex="-1"></a></span>
-<span id="cb7-37"><a href="#cb7-37" tabindex="-1"></a>cohort_id <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="fu">c</span>(<span class="dv">12602</span>, <span class="dv">18613</span>))</span>
-<span id="cb7-38"><a href="#cb7-38" tabindex="-1"></a></span>
-<span id="cb7-39"><a href="#cb7-39" tabindex="-1"></a><span class="co"># Identify Adult Sepsis Events</span></span>
-<span id="cb7-40"><a href="#cb7-40" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">define_ase</span>(<span class="at">daily_data =</span> daily_data, </span>
-<span id="cb7-41"><a href="#cb7-41" tabindex="-1"></a>                                         <span class="at">transferout_id =</span> transferout_id, </span>
-<span id="cb7-42"><a href="#cb7-42" tabindex="-1"></a>                                         <span class="at">cohort_id =</span> cohort_id,</span>
-<span id="cb7-43"><a href="#cb7-43" tabindex="-1"></a>                                         <span class="at">window =</span> <span class="dv">2</span>,</span>
-<span id="cb7-44"><a href="#cb7-44" tabindex="-1"></a>                                         <span class="at">abx_days =</span> <span class="dv">4</span>,</span>
-<span id="cb7-45"><a href="#cb7-45" tabindex="-1"></a>                                         <span class="at">creat_hi_lo_ratio =</span> <span class="dv">2</span>,</span>
-<span id="cb7-46"><a href="#cb7-46" tabindex="-1"></a>                                         <span class="at">creat_hi_cutoff =</span> <span class="dv">44</span>,</span>
-<span id="cb7-47"><a href="#cb7-47" tabindex="-1"></a>                                         <span class="at">tbili_hi_cutoff =</span> <span class="fl">34.2</span>,</span>
-<span id="cb7-48"><a href="#cb7-48" tabindex="-1"></a>                                         <span class="at">tbili_hi_lo_ratio =</span> <span class="dv">2</span>,</span>
-<span id="cb7-49"><a href="#cb7-49" tabindex="-1"></a>                                         <span class="at">lact_hi_cutoff =</span> <span class="dv">2</span>,</span>
-<span id="cb7-50"><a href="#cb7-50" tabindex="-1"></a>                                         <span class="at">plt_lo_cutoff =</span> <span class="dv">100</span>,</span>
-<span id="cb7-51"><a href="#cb7-51" tabindex="-1"></a>                                         <span class="at">plt_lo_hi_ratio =</span> <span class="fl">0.5</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># Get the path to the example data file inside the package</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>data_path <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;example_input_data&quot;</span>, <span class="st">&quot;daily_data.csv&quot;</span>, <span class="at">package =</span> <span class="st">&quot;identifyASE&quot;</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co"># Read the data </span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>daily_data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(data_path)</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co"># Use `transferout_id` to indicate `seqnum` of patients who were transferred </span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co"># out to an acute hospital</span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>transferout_id <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">12602</span>,<span class="dv">54928</span>,<span class="dv">27201</span>)</span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="co"># Use `cohort_id` to select a subgroup by including 2 vectors: </span></span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="co"># The first vector contains patient IDs (`unique_pt_id`)  </span></span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="co"># The second vector contains sequence numbers (`seqnum`)</span></span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a></span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a>cohort_id <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="fu">c</span>(<span class="dv">12602</span>, <span class="dv">18613</span>))</span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a></span>
+<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a><span class="co"># Identify Adult Sepsis Events</span></span>
+<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">define_ase</span>(<span class="at">daily_data =</span> daily_data, </span>
+<span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a>                                         <span class="at">transferout_id =</span> transferout_id, </span>
+<span id="cb7-20"><a href="#cb7-20" tabindex="-1"></a>                                         <span class="at">cohort_id =</span> cohort_id,</span>
+<span id="cb7-21"><a href="#cb7-21" tabindex="-1"></a>                                         <span class="at">window =</span> <span class="dv">2</span>,</span>
+<span id="cb7-22"><a href="#cb7-22" tabindex="-1"></a>                                         <span class="at">abx_days =</span> <span class="dv">4</span>,</span>
+<span id="cb7-23"><a href="#cb7-23" tabindex="-1"></a>                                         <span class="at">creat_hi_lo_ratio =</span> <span class="dv">2</span>,</span>
+<span id="cb7-24"><a href="#cb7-24" tabindex="-1"></a>                                         <span class="at">creat_hi_cutoff =</span> <span class="dv">44</span>,</span>
+<span id="cb7-25"><a href="#cb7-25" tabindex="-1"></a>                                         <span class="at">tbili_hi_cutoff =</span> <span class="fl">34.2</span>,</span>
+<span id="cb7-26"><a href="#cb7-26" tabindex="-1"></a>                                         <span class="at">tbili_hi_lo_ratio =</span> <span class="dv">2</span>,</span>
+<span id="cb7-27"><a href="#cb7-27" tabindex="-1"></a>                                         <span class="at">lact_hi_cutoff =</span> <span class="dv">2</span>,</span>
+<span id="cb7-28"><a href="#cb7-28" tabindex="-1"></a>                                         <span class="at">plt_lo_cutoff =</span> <span class="dv">100</span>,</span>
+<span id="cb7-29"><a href="#cb7-29" tabindex="-1"></a>                                         <span class="at">plt_lo_hi_ratio =</span> <span class="fl">0.5</span>)</span></code></pre></div>
 </div>
 <div id="results" class="section level2">
 <h2>Results</h2>

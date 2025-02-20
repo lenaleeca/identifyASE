@@ -85,32 +85,11 @@ library(devtools)
 Here is an example of how to identify ASE cases using the main function `define_ase`:
 
 ```{r}
-daily_data <- data.frame(
-  unique_pt_id = c(1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 4, 4),
-  seqnum = c(12602, 12602, 12602, 18613, 18613, 18613, 54928, 54928, 54928, 
-             27201, 27201, 27201, 27201, 27201),
-  day = c(0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2, 3, 4),
-  death = c(0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-  ALL_DAYS = c(3, 3, 3, 3, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5),
-  bcx_daily = c(1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0),
-  vasop_daily = c(0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0),
-  imv_daily = c(0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0),
-  lact_daily_hi = c(1.5, 2.5, 1.8, 1.9, 2.1, 3.0, 1.5, 2.5, 1.8, 
-                    1.5, 1.9, 2.1, 2.1, 3.0),
-  tbili_daily_hi = c(30, 35, 40, 32, 36, 38, 30, 35, 40, 30, 32, 35, 36, 50),
-  tbili_daily_lo = c(30, 35, 40, 32, 36, 38, 30, 35, 40, 30, 32, 35, 36, 50),
-  tbili_baseline = c(20, 20, 20, 25, 25, 25, 20, 20, 20, 25, 25, 25, 25, 25),
-  creat_daily_hi = c(40, 45, 50, 35, 60, 55, 40, 45, 50, 35, 35, 45, 60, 55),
-  creat_daily_lo = c(40, 45, 50, 35, 60, 55, 40, 45, 50, 35, 35, 45, 60, 55),
-  creat_baseline = c(20, 20, 20, 25, 25, 25, 20, 20, 20, 25, 25, 25, 25, 25),
-  plt_daily_hi = c(150, 80, 90, 110, 70, 50, 150, 80, 90, 150, 140, 70, 60, 50),
-  plt_daily_lo = c(150, 80, 90, 110, 70, 50, 150, 80, 90, 150, 140, 70, 60, 50),
-  plt_baseline = c(200, 200, 200, 180, 180, 180, 200, 200, 200, 
-                   180, 180, 180, 180, 180),
-  esrd_icd = c(0, 0, 0, 0, 0, 0,0, 0, 0, 0, 0, 0,0,0),
-  new_abx_start = c(0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0),
-  abx_daily = c(0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1)
-)
+# Get the path to the example data file inside the package
+data_path <- system.file("extdata", "example_input_data", "daily_data.csv", package = "identifyASE")
+
+# Read the data 
+daily_data <- read.csv(data_path)
 
 transferout_id <- c(12602,54928,27201)
 
