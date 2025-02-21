@@ -27,13 +27,13 @@ If the repo is private:
 
     ```r
     # Replace 'your_personal_access_token' with your GitHub personal access token
-    install_github("lenaleeca/identifyASE", auth_token = "your_personal_access_token")
+    install_github("lenaleeca/IdentifyASE")
     ```
 
 3. **Load the package**
 
     ```r
-    library(identifyASE)
+    library(IdentifyASE)
     ```
 
 If the repo is public:
@@ -48,13 +48,13 @@ If the repo is public:
 2. **Install the package from GitHub**
 
     ```r
-    install_github("lenaleeca/identifyASE")
+    install_github("lenaleeca/IdentifyASE")
     ```
 
 3. **Load the package**
 
     ```r
-    library(identifyASE)
+    library(IdentifyASE)
     ```
     
 ## Dependencies
@@ -86,7 +86,7 @@ Here is an example of how to identify ASE cases using the main function `define_
 
 ```{r}
 # Get the path to the example data file inside the package
-data_path <- system.file("extdata", "example_input_data", "daily_data.csv", package = "identifyASE")
+data_path <- system.file("extdata", "example_input_data", "daily_data.csv", package = "IdentifyASE")
 
 # Read the data 
 daily_data <- read.csv(data_path)
@@ -109,7 +109,7 @@ vignette("vignette_ase")
 or 
 
 ```r
-browseVignettes("identifyASE")
+browseVignettes("IdentifyASE")
 ```
 
 ## Citation
