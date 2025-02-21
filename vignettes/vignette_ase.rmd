@@ -41,15 +41,15 @@ For more detailed information, refer to the [CDC Hospital Toolkit for Adult Seps
 
 ---
 
-## IdentifyASE Package
+## `identifyASE` Package
 
-The IdentifyASE package follows a hierarchical structure modelled on the ASE toolkit’s criteria to identify ASE in hospitalized patients. The `define_ase` function sits at the top of the hierarchical structure of the package and is the main function users will interact with. This function initiates the analysis by sequentially executing key functions to check the ASE criteria. The first criterion, presumed infection, is checked by identifying blood culture events through `slice_bcx_data` and qualifying antimicrobial medications through `qualifying_abx_duration`. The second criterion, acute organ dysfunction, is evaluated using `add_aod_daily`. These key functions are supported by helper functions at a lower level, which handle specific data transformations and calculations. 
+The `identifyASE` package follows a hierarchical structure modelled on the ASE toolkit’s criteria to identify ASE in hospitalized patients. The `define_ase` function sits at the top of the hierarchical structure of the package and is the main function users will interact with. This function initiates the analysis by sequentially executing key functions to check the ASE criteria. The first criterion, presumed infection, is checked by identifying blood culture events through `slice_bcx_data` and qualifying antimicrobial medications through `qualifying_abx_duration`. The second criterion, acute organ dysfunction, is evaluated using `add_aod_daily`. These key functions are supported by helper functions at a lower level, which handle specific data transformations and calculations. 
 
 ---
 
 ## Installation
 
-To install the `IdentifyASE` package from GitHub, you need the `devtools` package. If the repository is private, make sure you have a personal access token.
+To install the `identifyASE` package from GitHub, you need the `devtools` package. If the repository is private, make sure you have a personal access token.
 
 ### Step-by-step installation
 
