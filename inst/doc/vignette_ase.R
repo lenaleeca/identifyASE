@@ -21,6 +21,9 @@ knitr::opts_chunk$set(
 # # Replace 'your_personal_access_token' with your GitHub personal access token
 # install_github("lenaleeca/identifyASE", auth_token = "your_personal_access_token")
 
+## ----eval = FALSE-------------------------------------------------------------
+# install_github("lenaleeca/identifyASE")
+
 ## -----------------------------------------------------------------------------
 library(identifyASE)
 

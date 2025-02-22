@@ -12,7 +12,7 @@
 
 <meta name="author" content="Dr. Na Li" />
 
-<meta name="date" content="2025-02-20" />
+<meta name="date" content="2025-02-21" />
 
 <title>Identify Adult Sepsis Events</title>
 
@@ -340,7 +340,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Identify Adult Sepsis Events</h1>
 <h4 class="author">Dr. Na Li</h4>
-<h4 class="date">2025-02-20</h4>
+<h4 class="date">2025-02-21</h4>
 
 
 
@@ -374,24 +374,25 @@ Hospital Toolkit for Adult Sepsis Surveillance</a>.</p>
 <hr />
 </div>
 <div id="identifyase-package" class="section level2">
-<h2>IdentifyASE Package</h2>
-<p>The IdentifyASE package follows a hierarchical structure modelled on
-the ASE toolkit’s criteria to identify ASE in hospitalized patients. The
-<code>define_ase</code> function sits at the top of the hierarchical
-structure of the package and is the main function users will interact
-with. This function initiates the analysis by sequentially executing key
-functions to check the ASE criteria. The first criterion, presumed
-infection, is checked by identifying blood culture events through
-<code>slice_bcx_data</code> and qualifying antimicrobial medications
-through <code>qualifying_abx_duration</code>. The second criterion,
-acute organ dysfunction, is evaluated using <code>add_aod_daily</code>.
-These key functions are supported by helper functions at a lower level,
-which handle specific data transformations and calculations.</p>
+<h2><code>identifyASE</code> Package</h2>
+<p>The <code>identifyASE</code> package follows a hierarchical structure
+modelled on the ASE toolkit’s criteria to identify ASE in hospitalized
+patients. The <code>define_ase</code> function sits at the top of the
+hierarchical structure of the package and is the main function users
+will interact with. This function initiates the analysis by sequentially
+executing key functions to check the ASE criteria. The first criterion,
+presumed infection, is checked by identifying blood culture events
+through <code>slice_bcx_data</code> and qualifying antimicrobial
+medications through <code>qualifying_abx_duration</code>. The second
+criterion, acute organ dysfunction, is evaluated using
+<code>add_aod_daily</code>. These key functions are supported by helper
+functions at a lower level, which handle specific data transformations
+and calculations.</p>
 <hr />
 </div>
 <div id="installation" class="section level2">
 <h2>Installation</h2>
-<p>To install the <code>IdentifyASE</code> package from GitHub, you need
+<p>To install the <code>identifyASE</code> package from GitHub, you need
 the <code>devtools</code> package. If the repository is private, make
 sure you have a personal access token.</p>
 <div id="step-by-step-installation" class="section level3">
@@ -404,12 +405,15 @@ sure you have a personal access token.</p>
 <ol start="2" style="list-style-type: decimal">
 <li>Install the package from GitHub</li>
 </ol>
+<p>If the repository is private:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># Replace &#39;your_personal_access_token&#39; with your GitHub personal access token</span></span>
 <span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">install_github</span>(<span class="st">&quot;lenaleeca/identifyASE&quot;</span>, <span class="at">auth_token =</span> <span class="st">&quot;your_personal_access_token&quot;</span>)</span></code></pre></div>
+<p>If the repository is public:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">install_github</span>(<span class="st">&quot;lenaleeca/identifyASE&quot;</span>)</span></code></pre></div>
 <ol start="3" style="list-style-type: decimal">
 <li>Load the package</li>
 </ol>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">library</span>(identifyASE)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">library</span>(identifyASE)</span></code></pre></div>
 </div>
 <div id="dependencies" class="section level3">
 <h3>Dependencies</h3>
@@ -423,13 +427,13 @@ sure you have a personal access token.</p>
 </ul>
 <p>Make sure these packages are installed and loaded in your R
 environment.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">&quot;dplyr&quot;</span>, <span class="st">&quot;purrr&quot;</span>, <span class="st">&quot;future&quot;</span>, <span class="st">&quot;furrr&quot;</span>, <span class="st">&quot;devtools&quot;</span>), </span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>                                 <span class="at">repos =</span> <span class="st">&quot;https://cran.rstudio.com&quot;</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="fu">library</span>(purrr)</span>
-<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="fu">library</span>(future)</span>
-<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="fu">library</span>(furrr)</span>
-<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="fu">library</span>(devtools)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">&quot;dplyr&quot;</span>, <span class="st">&quot;purrr&quot;</span>, <span class="st">&quot;future&quot;</span>, <span class="st">&quot;furrr&quot;</span>, <span class="st">&quot;devtools&quot;</span>), </span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>                                 <span class="at">repos =</span> <span class="st">&quot;https://cran.rstudio.com&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="fu">library</span>(purrr)</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="fu">library</span>(future)</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="fu">library</span>(furrr)</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="fu">library</span>(devtools)</span></code></pre></div>
 <hr />
 </div>
 </div>
@@ -606,8 +610,8 @@ ensuring data integrity when importing/exporting values.</li>
 </ul>
 <p>In such cases, please install and load the <code>bit64</code> package
 before running the define_ase function.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;bit64&quot;</span>)</span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="fu">library</span>(bit64)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;bit64&quot;</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="fu">library</span>(bit64)</span></code></pre></div>
 </div>
 </div>
 <div id="key-functions" class="section level2">
@@ -750,35 +754,35 @@ dysfunction (default is 0.5, per the ASE toolkit).</td>
 </div>
 <div id="example" class="section level2">
 <h2>Example</h2>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># Get the path to the example data file inside the package</span></span>
-<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>data_path <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;example_input_data&quot;</span>, <span class="st">&quot;daily_data.csv&quot;</span>, <span class="at">package =</span> <span class="st">&quot;identifyASE&quot;</span>)</span>
-<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a></span>
-<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co"># Read the data </span></span>
-<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>daily_data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(data_path)</span>
-<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a></span>
-<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co"># Use `transferout_id` to indicate `seqnum` of patients who were transferred </span></span>
-<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co"># out to an acute hospital</span></span>
-<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>transferout_id <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">12602</span>,<span class="dv">54928</span>,<span class="dv">27201</span>)</span>
-<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a></span>
-<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="co"># Use `cohort_id` to select a subgroup by including 2 vectors: </span></span>
-<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="co"># The first vector contains patient IDs (`unique_pt_id`)  </span></span>
-<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="co"># The second vector contains sequence numbers (`seqnum`)</span></span>
-<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a></span>
-<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a>cohort_id <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="fu">c</span>(<span class="dv">12602</span>, <span class="dv">18613</span>))</span>
-<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a></span>
-<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a><span class="co"># Identify Adult Sepsis Events</span></span>
-<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">define_ase</span>(<span class="at">daily_data =</span> daily_data, </span>
-<span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a>                                         <span class="at">transferout_id =</span> transferout_id, </span>
-<span id="cb7-20"><a href="#cb7-20" tabindex="-1"></a>                                         <span class="at">cohort_id =</span> cohort_id,</span>
-<span id="cb7-21"><a href="#cb7-21" tabindex="-1"></a>                                         <span class="at">window =</span> <span class="dv">2</span>,</span>
-<span id="cb7-22"><a href="#cb7-22" tabindex="-1"></a>                                         <span class="at">abx_days =</span> <span class="dv">4</span>,</span>
-<span id="cb7-23"><a href="#cb7-23" tabindex="-1"></a>                                         <span class="at">creat_hi_lo_ratio =</span> <span class="dv">2</span>,</span>
-<span id="cb7-24"><a href="#cb7-24" tabindex="-1"></a>                                         <span class="at">creat_hi_cutoff =</span> <span class="dv">44</span>,</span>
-<span id="cb7-25"><a href="#cb7-25" tabindex="-1"></a>                                         <span class="at">tbili_hi_cutoff =</span> <span class="fl">34.2</span>,</span>
-<span id="cb7-26"><a href="#cb7-26" tabindex="-1"></a>                                         <span class="at">tbili_hi_lo_ratio =</span> <span class="dv">2</span>,</span>
-<span id="cb7-27"><a href="#cb7-27" tabindex="-1"></a>                                         <span class="at">lact_hi_cutoff =</span> <span class="dv">2</span>,</span>
-<span id="cb7-28"><a href="#cb7-28" tabindex="-1"></a>                                         <span class="at">plt_lo_cutoff =</span> <span class="dv">100</span>,</span>
-<span id="cb7-29"><a href="#cb7-29" tabindex="-1"></a>                                         <span class="at">plt_lo_hi_ratio =</span> <span class="fl">0.5</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># Get the path to the example data file inside the package</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>data_path <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;example_input_data&quot;</span>, <span class="st">&quot;daily_data.csv&quot;</span>, <span class="at">package =</span> <span class="st">&quot;identifyASE&quot;</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co"># Read the data </span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>daily_data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(data_path)</span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co"># Use `transferout_id` to indicate `seqnum` of patients who were transferred </span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="co"># out to an acute hospital</span></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>transferout_id <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">12602</span>,<span class="dv">54928</span>,<span class="dv">27201</span>)</span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a><span class="co"># Use `cohort_id` to select a subgroup by including 2 vectors: </span></span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a><span class="co"># The first vector contains patient IDs (`unique_pt_id`)  </span></span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a><span class="co"># The second vector contains sequence numbers (`seqnum`)</span></span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a></span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a>cohort_id <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="fu">c</span>(<span class="dv">12602</span>, <span class="dv">18613</span>))</span>
+<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a></span>
+<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a><span class="co"># Identify Adult Sepsis Events</span></span>
+<span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">define_ase</span>(<span class="at">daily_data =</span> daily_data, </span>
+<span id="cb8-19"><a href="#cb8-19" tabindex="-1"></a>                                         <span class="at">transferout_id =</span> transferout_id, </span>
+<span id="cb8-20"><a href="#cb8-20" tabindex="-1"></a>                                         <span class="at">cohort_id =</span> cohort_id,</span>
+<span id="cb8-21"><a href="#cb8-21" tabindex="-1"></a>                                         <span class="at">window =</span> <span class="dv">2</span>,</span>
+<span id="cb8-22"><a href="#cb8-22" tabindex="-1"></a>                                         <span class="at">abx_days =</span> <span class="dv">4</span>,</span>
+<span id="cb8-23"><a href="#cb8-23" tabindex="-1"></a>                                         <span class="at">creat_hi_lo_ratio =</span> <span class="dv">2</span>,</span>
+<span id="cb8-24"><a href="#cb8-24" tabindex="-1"></a>                                         <span class="at">creat_hi_cutoff =</span> <span class="dv">44</span>,</span>
+<span id="cb8-25"><a href="#cb8-25" tabindex="-1"></a>                                         <span class="at">tbili_hi_cutoff =</span> <span class="fl">34.2</span>,</span>
+<span id="cb8-26"><a href="#cb8-26" tabindex="-1"></a>                                         <span class="at">tbili_hi_lo_ratio =</span> <span class="dv">2</span>,</span>
+<span id="cb8-27"><a href="#cb8-27" tabindex="-1"></a>                                         <span class="at">lact_hi_cutoff =</span> <span class="dv">2</span>,</span>
+<span id="cb8-28"><a href="#cb8-28" tabindex="-1"></a>                                         <span class="at">plt_lo_cutoff =</span> <span class="dv">100</span>,</span>
+<span id="cb8-29"><a href="#cb8-29" tabindex="-1"></a>                                         <span class="at">plt_lo_hi_ratio =</span> <span class="fl">0.5</span>)</span></code></pre></div>
 </div>
 <div id="results" class="section level2">
 <h2>Results</h2>
@@ -793,7 +797,7 @@ indicators for qualifying antimicrobial treatments, the presence of
 various types of acute organ dysfunctions, and indicators for sepsis
 onset types, which can be used for subsequent reporting.</p>
 <p>To view the full output:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">print</span>(result)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">print</span>(result)</span></code></pre></div>
 <p>The structure of the output is a list with multiple nested levels,
 with the top-level keys “IDs”, “Data_(x)days”.</p>
 <ol style="list-style-type: decimal">
@@ -811,26 +815,26 @@ sub-keys:</li>
 community-onset ASE cases in the specified window.</li>
 </ul>
 <p>To export the IDs lists to csv files, use the following code:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>ids_list <span class="ot">&lt;-</span> result[[<span class="st">&quot;IDs&quot;</span>]] </span>
-<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="fu">invisible</span>(</span>
-<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>  <span class="co"># Iterate over the single-layer list</span></span>
-<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>  <span class="fu">lapply</span>(<span class="fu">names</span>(ids_list), <span class="cf">function</span>(id_name) {</span>
-<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>    <span class="co"># Extract the data (sequence numbers) for the current id_name</span></span>
-<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>    data <span class="ot">&lt;-</span> ids_list[[id_name]]</span>
-<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>    </span>
-<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>    <span class="co"># Convert the data to a data frame</span></span>
-<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>    data_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">seqnum =</span> data)</span>
-<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a>    </span>
-<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a>    <span class="co"># Define the output file name</span></span>
-<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a>    file_name <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;IDs_&quot;</span>, id_name, <span class="st">&quot;.csv&quot;</span>)</span>
-<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a>    </span>
-<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a>    <span class="co"># Export to CSV</span></span>
-<span id="cb9-15"><a href="#cb9-15" tabindex="-1"></a>    <span class="fu">write.csv</span>(data_df, file_name, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb9-16"><a href="#cb9-16" tabindex="-1"></a>    </span>
-<span id="cb9-17"><a href="#cb9-17" tabindex="-1"></a>    <span class="co"># Print confirmation message</span></span>
-<span id="cb9-18"><a href="#cb9-18" tabindex="-1"></a>    <span class="fu">cat</span>(<span class="st">&quot;Exported:&quot;</span>, file_name, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
-<span id="cb9-19"><a href="#cb9-19" tabindex="-1"></a>  })</span>
-<span id="cb9-20"><a href="#cb9-20" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>ids_list <span class="ot">&lt;-</span> result[[<span class="st">&quot;IDs&quot;</span>]] </span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="fu">invisible</span>(</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>  <span class="co"># Iterate over the single-layer list</span></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>  <span class="fu">lapply</span>(<span class="fu">names</span>(ids_list), <span class="cf">function</span>(id_name) {</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>    <span class="co"># Extract the data (sequence numbers) for the current id_name</span></span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>    data <span class="ot">&lt;-</span> ids_list[[id_name]]</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>    </span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>    <span class="co"># Convert the data to a data frame</span></span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a>    data_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">seqnum =</span> data)</span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a>    </span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a>    <span class="co"># Define the output file name</span></span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a>    file_name <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;IDs_&quot;</span>, id_name, <span class="st">&quot;.csv&quot;</span>)</span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a>    </span>
+<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a>    <span class="co"># Export to CSV</span></span>
+<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a>    <span class="fu">write.csv</span>(data_df, file_name, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb10-16"><a href="#cb10-16" tabindex="-1"></a>    </span>
+<span id="cb10-17"><a href="#cb10-17" tabindex="-1"></a>    <span class="co"># Print confirmation message</span></span>
+<span id="cb10-18"><a href="#cb10-18" tabindex="-1"></a>    <span class="fu">cat</span>(<span class="st">&quot;Exported:&quot;</span>, file_name, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb10-19"><a href="#cb10-19" tabindex="-1"></a>  })</span>
+<span id="cb10-20"><a href="#cb10-20" tabindex="-1"></a>)</span></code></pre></div>
 <ol start="2" style="list-style-type: decimal">
 <li><em>“Data_(x)days”</em> includes data of ASE cases surrounding the
 selected (x) window (1-day,2-day, 3-day or 4-day). For example, if
@@ -866,8 +870,8 @@ ASE.</li>
 </ul></li>
 </ul>
 <p>To export the data to csv file, use the following code:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co"># Export Data_2days to a csv file</span></span>
-<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="fu">write.csv</span>(result<span class="sc">$</span>Data_2days, <span class="st">&quot;Data_2days.csv&quot;</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="co"># Export Data_2days to a csv file</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="fu">write.csv</span>(result<span class="sc">$</span>Data_2days, <span class="st">&quot;Data_2days.csv&quot;</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 <hr />
 </div>
 <div id="searching-data-by-sequence-number-with-search_by_seqnum" class="section level2">
@@ -879,21 +883,21 @@ BCWP data and retrieve the data slices that match a specified sequence
 number.</p>
 <div id="example-1" class="section level3">
 <h3>Example</h3>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="co"># Example sliced_data_list</span></span>
-<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>sliced_data_list <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
-<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">unique_pt_id =</span> <span class="dv">1</span>, <span class="at">seqnum =</span> <span class="dv">12602</span>, <span class="at">data =</span> <span class="fu">data.frame</span>(<span class="at">day =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, </span>
-<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>                                                       <span class="at">bcx_daily =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>))),</span>
-<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">unique_pt_id =</span> <span class="dv">2</span>, <span class="at">seqnum =</span> <span class="dv">18613</span>, <span class="at">data =</span> <span class="fu">data.frame</span>(<span class="at">day =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, </span>
-<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a>                                                       <span class="at">bcx_daily =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>)))</span>
-<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a>)</span>
-<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a></span>
-<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a><span class="co"># Call the function to search for sequence number 12602</span></span>
-<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a><span class="fu">search_by_seqnum</span>(sliced_data_list, <span class="dv">12602</span>)</span>
-<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a><span class="co">#&gt; [[1]]</span></span>
-<span id="cb11-12"><a href="#cb11-12" tabindex="-1"></a><span class="co">#&gt;   day bcx_daily</span></span>
-<span id="cb11-13"><a href="#cb11-13" tabindex="-1"></a><span class="co">#&gt; 1   1         0</span></span>
-<span id="cb11-14"><a href="#cb11-14" tabindex="-1"></a><span class="co">#&gt; 2   2         1</span></span>
-<span id="cb11-15"><a href="#cb11-15" tabindex="-1"></a><span class="co">#&gt; 3   3         0</span></span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co"># Example sliced_data_list</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>sliced_data_list <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">unique_pt_id =</span> <span class="dv">1</span>, <span class="at">seqnum =</span> <span class="dv">12602</span>, <span class="at">data =</span> <span class="fu">data.frame</span>(<span class="at">day =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, </span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>                                                       <span class="at">bcx_daily =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>))),</span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">unique_pt_id =</span> <span class="dv">2</span>, <span class="at">seqnum =</span> <span class="dv">18613</span>, <span class="at">data =</span> <span class="fu">data.frame</span>(<span class="at">day =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, </span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a>                                                       <span class="at">bcx_daily =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>)))</span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a>)</span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a></span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a><span class="co"># Call the function to search for sequence number 12602</span></span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a><span class="fu">search_by_seqnum</span>(sliced_data_list, <span class="dv">12602</span>)</span>
+<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a><span class="co">#&gt; [[1]]</span></span>
+<span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a><span class="co">#&gt;   day bcx_daily</span></span>
+<span id="cb12-13"><a href="#cb12-13" tabindex="-1"></a><span class="co">#&gt; 1   1         0</span></span>
+<span id="cb12-14"><a href="#cb12-14" tabindex="-1"></a><span class="co">#&gt; 2   2         1</span></span>
+<span id="cb12-15"><a href="#cb12-15" tabindex="-1"></a><span class="co">#&gt; 3   3         0</span></span></code></pre></div>
 <hr />
 </div>
 </div>

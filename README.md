@@ -1,6 +1,6 @@
-# IdentifyASE
+# identifyASE
 
-IdentifyASE is an R package designed to process daily patient data to identify adult sepsis events (ASE) in hospitalized patients using the CDC's ASE Toolkit. 
+identifyASE is an R package designed to process daily patient data to identify adult sepsis events (ASE) in hospitalized patients using the CDC's ASE Toolkit. 
 The `define_ase` function sits at the top of the hierarchical structure of the package and is the main function users will interact with. This function initiates the analysis by sequentially executing key functions to check the ASE criteria. 
 The first criterion, presumed infection, is checked by identifying blood culture events through `slice_bcx_data` and qualifying antimicrobial medications through `qualifying_abx_duration`. 
 The second criterion, acute organ dysfunction, is evaluated using `add_aod_daily`. These key functions are supported by helper functions at a lower level, which handle specific data transformations and calculations.
@@ -10,11 +10,11 @@ Researchers can adjust these parameters, select sub-groups, and indicate patient
 
 ## Installation
 
-To install the IdentifyASE package from GitHub, you need to use the `devtools` package. 
+To install the identifyASE package from GitHub, you need to use the `devtools` package. 
 
 ### Step-by-Step Installation
 
-If the repo is private: 
+If the repository is private: 
 
 1. **Install and load `devtools`**
 
@@ -36,7 +36,7 @@ If the repo is private:
     library(identifyASE)
     ```
 
-If the repo is public:
+If the repository is public:
 
 1. **Install and load `devtools`**
 
