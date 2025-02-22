@@ -189,7 +189,8 @@ This is the main function users will interact with in the package. By invoking `
 
 ```{r}
 # Get the path to the example data file inside the package
-data_path <- system.file("extdata", "example_input_data", "daily_data.csv", package = "identifyASE")
+data_path <- system.file("extdata", "example_input_data", 
+                         "daily_data.csv", package = "identifyASE")
 
 # Read the data 
 daily_data <- read.csv(data_path)
@@ -313,4 +314,4 @@ search_by_seqnum(sliced_data_list, 12602)
 
 An interactive R Shiny app was developed to enhance accessibility. Users can upload their own data or explore a demo dataset to test the package’s capabilities. Users can interact with the app through simple actions (e.g., clicking buttons or entering inputs) to select subgroups, adjust lab value thresholds, identify ASE cases, and download outputs. 
 
-
+Check out the Shiny App [here](https://lenaleeca.shinyapps.io/shiny-identifyase/).

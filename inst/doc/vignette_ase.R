@@ -47,7 +47,8 @@ library(devtools)
 
 ## -----------------------------------------------------------------------------
 # Get the path to the example data file inside the package
-data_path <- system.file("extdata", "example_input_data", "daily_data.csv", package = "identifyASE")
+data_path <- system.file("extdata", "example_input_data", 
+                         "daily_data.csv", package = "identifyASE")
 
 # Read the data 
 daily_data <- read.csv(data_path)
