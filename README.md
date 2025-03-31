@@ -114,9 +114,7 @@ browseVignettes("identifyASE")
 
 ## Shiny App
 
-An interactive R Shiny app was developed to enhance accessibility. Users can upload their own data or explore a demo dataset to test the package’s capabilities. Users can interact with the app through simple actions (e.g., clicking buttons or entering inputs) to select subgroups, adjust lab value thresholds, identify ASE cases, and download outputs. 
-
-Check out the Shiny App [here](https://lenaleeca.shinyapps.io/shiny-identifyase/).
+An interactive R Shiny app was developed to enhance accessibility. Users can upload their own data or explore a demo dataset to test the package’s capabilities. Users can interact with the app through simple actions (e.g., clicking buttons or entering inputs) to select subgroups, adjust lab value thresholds, identify ASE cases, and download outputs. Check out the Shiny App [here](https://lenaleeca.shinyapps.io/shiny-identifyase/).
 -----
 
 ## Citation
